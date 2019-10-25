@@ -10,15 +10,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.cognizant.news.R
 import com.cognizant.news.adapter.NewsAdapter
 import com.cognizant.news.data.NewsViewModel
+import com.cognizant.news.data.model.News
 import kotlinx.android.synthetic.main.news_fragment.*
 
-class NewsFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = NewsFragment()
-    }
+
+class NewsHomeFragment(private val navigation :(Pair<FragmentName, News>) -> (Unit) ) : Fragment() {
 
     private lateinit var viewModel: NewsViewModel
+
+    //Handle item click
+    private var itemClick: (News) -> (Unit) = { news ->
+        navigation.invoke(Pair(FragmentName.NewsDetails, news))
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,8 +43,18 @@ class NewsFragment : Fragment() {
         val linearLayoutManager = LinearLayoutManager(activity)
         recyclerView.apply {
            layoutManager = linearLayoutManager
-            adapter =  NewsAdapter()
+            adapter =  NewsAdapter(itemClick)
         }
     }
 
+
+
+//    /**
+//     * Changes the icon of the drawer to back
+//     */
+//    fun showBackButton() {
+//        //if (activity is ActionBarActivity) {
+//           activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true)
+//       // }
+//    }
 }
