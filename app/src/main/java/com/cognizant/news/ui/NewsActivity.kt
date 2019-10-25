@@ -36,6 +36,7 @@ class NewsActivity : AppCompatActivity() {
                     .addToBackStack(null)
                     .commit()
                 mCurrentFragment = newsDetailFragment
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
             }
         }
     }
@@ -62,6 +63,7 @@ class NewsActivity : AppCompatActivity() {
         if (mCurrentFragment is NewsDetailFragment) {
             supportFragmentManager.popBackStackImmediate()
             mCurrentFragment = newsHomeFragment
+            supportActionBar?.setDisplayHomeAsUpEnabled(false)
         } else {
             finish()
         }
