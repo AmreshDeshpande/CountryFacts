@@ -8,8 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cognizant.news.R
+import com.cognizant.news.adapter.NewsAdapter
 import com.cognizant.news.data.NewsViewModel
-import kotlinx.android.synthetic.main.main_fragment.*
+import kotlinx.android.synthetic.main.news_fragment.*
 
 class NewsFragment : Fragment() {
 
@@ -23,7 +24,7 @@ class NewsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.main_fragment, container, false)
+        return inflater.inflate(R.layout.news_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -38,6 +39,7 @@ class NewsFragment : Fragment() {
         val linearLayoutManager = LinearLayoutManager(activity)
         recyclerView.apply {
            layoutManager = linearLayoutManager
+            adapter =  NewsAdapter()
         }
     }
 

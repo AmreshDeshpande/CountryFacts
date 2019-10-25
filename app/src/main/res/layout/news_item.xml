@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/margin_10"
+    android:background="@drawable/background">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Yes, we can do that by using a vector file. In order to add this functionality in a mobile application."
+        style="@style/NewsTitle"
+        android:layout_marginEnd="@dimen/margin_10"
+        />
+
+    <TextView
+        android:id="@+id/news"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.6"
+        android:text="yes, we can do that by using a vector file. In order to add this functionality in a mobile application, Android Studio includes a tool called the Vector Asset Studio that is used to add some predefined material icons along with your own"
+        style="@style/News"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/title"
+        app:layout_constraintRight_toLeftOf="@+id/image"
+        app:layout_constraintTop_toBottomOf="@+id/title"/>
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.3"
+        android:contentDescription="@string/news_image"
+        android:src="@android:drawable/ic_menu_gallery"
+        app:layout_constraintLeft_toRightOf="@+id/news"
+        app:layout_constraintRight_toRightOf="@+id/news"
+        app:layout_constraintTop_toTopOf="@+id/news"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/rightArrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/see_news_details"
+        android:src="@drawable/ic_chevron_right"
+        android:tint="@color/grey"
+        android:layout_marginLeft="@dimen/margin_10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/image"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

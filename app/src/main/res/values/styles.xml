@@ -8,4 +8,15 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <style name="NewsTitle" parent="android:Theme">
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+
+    <style name="News" parent="android:Theme">
+        <item name="android:textColor">@color/dark</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
 </resources>
