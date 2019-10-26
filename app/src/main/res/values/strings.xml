@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">News</string>
     <string name="news_image">News image</string>
+    <string name="news_content_unavailable">News details unavailable!!</string>
     <string name="see_news_details">Click for News details</string>
 
     <!-- TODO: Remove or change this placeholder text -->
