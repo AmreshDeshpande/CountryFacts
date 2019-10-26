@@ -8,12 +8,12 @@ import android.view.ViewGroup
 import com.cognizant.news.data.model.News
 import android.view.MenuItem
 import com.cognizant.news.R
-
+import com.cognizant.news.data.model.Article
 
 const val NEWS_PARAM = "news_param"
 
 class NewsDetailFragment: Fragment() {
-    private var param: News? = null
+    private var param: Article? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

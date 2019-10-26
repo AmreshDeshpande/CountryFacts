@@ -6,21 +6,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.cognizant.news.R
+import androidx.lifecycle.Observer
 import com.cognizant.news.adapter.NewsAdapter
 import com.cognizant.news.data.NewsViewModel
-import com.cognizant.news.data.model.News
+import com.cognizant.news.data.NewsViewModelFactory
+import com.cognizant.news.data.model.Article
+import com.cognizant.news.dataprovider.NewsApiDataProvider
 import kotlinx.android.synthetic.main.news_fragment.*
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.cognizant.news.R
 
 
-
-class NewsHomeFragment(private val navigation :(Pair<FragmentName, News>) -> (Unit) ) : Fragment() {
+class NewsHomeFragment(private val navigation :(Pair<FragmentName, Article?>) -> (Unit) ) : Fragment() {
 
     private lateinit var viewModel: NewsViewModel
 
+    private lateinit var newsAdapter :NewsAdapter
+
     //Handle item click
-    private var itemClick: (News) -> (Unit) = { news ->
+    private var itemClick: (Article?) -> (Unit) = { news ->
         navigation.invoke(Pair(FragmentName.NewsDetails, news))
     }
 
@@ -33,28 +37,30 @@ class NewsHomeFragment(private val navigation :(Pair<FragmentName, News>) -> (Un
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(NewsViewModel::class.java)
-        // TODO: Use the ViewModel
+        viewModel =  ViewModelProviders
+            .of(this, NewsViewModelFactory(NewsApiDataProvider()))
+            .get(NewsViewModel::class.java)
 
+        fetchNews()
         setupRecyclerView()
     }
 
+    private fun fetchNews() {
+        viewModel.getNewsData()?.observe(viewLifecycleOwner, Observer { newsList ->
+            newsAdapter.newsData = newsList
+            newsAdapter.notifyDataSetChanged()
+        })
+        viewModel.getNews()
+    }
+
     private fun setupRecyclerView() {
-        val linearLayoutManager = LinearLayoutManager(activity)
+        val linearLayoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+
         recyclerView.apply {
            layoutManager = linearLayoutManager
-            adapter =  NewsAdapter(itemClick)
+            newsAdapter = NewsAdapter(itemClick)
+            adapter =  newsAdapter
         }
     }
 
-
-
-//    /**
-//     * Changes the icon of the drawer to back
-//     */
-//    fun showBackButton() {
-//        //if (activity is ActionBarActivity) {
-//           activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true)
-//       // }
-//    }
 }

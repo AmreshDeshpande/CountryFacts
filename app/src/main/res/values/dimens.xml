@@ -1,4 +1,5 @@
 <resources>
     <dimen name="margin_10">10dp</dimen>
     <dimen name="tool_bar_height">56dp</dimen>
+    <dimen name="image_height">60dp</dimen>
 </resources>
