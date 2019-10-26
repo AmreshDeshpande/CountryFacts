@@ -5,10 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.cognizant.news.data.model.News
 import android.view.MenuItem
 import com.cognizant.news.R
 import com.cognizant.news.data.model.Article
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.news_detail_fragment.*
 
 const val NEWS_PARAM = "news_param"
 
@@ -22,13 +23,27 @@ class NewsDetailFragment: Fragment() {
         }
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        bindNewsDetails(param)
+    }
+
+    private fun bindNewsDetails(article: Article?) {
+        newsDetailImage.let { imageView ->
+            Picasso.with(activity)
+                .load(article?.image)
+                .into(newsDetailImage)
+        }
+        newsDetailContent.text = article?.content
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_news_detail, container, false)
+        return inflater.inflate(R.layout.news_detail_fragment, container, false)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

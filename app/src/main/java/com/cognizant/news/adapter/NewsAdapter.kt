@@ -8,7 +8,6 @@ import com.cognizant.news.data.model.Article
 import com.cognizant.news.data.model.News
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.news_item.view.*
-import android.net.Uri
 import com.cognizant.news.R
 
 
@@ -39,11 +38,12 @@ class NewsItemViewHolder(newItemView: View) : RecyclerView.ViewHolder(newItemVie
     fun bind(article: Article?, itemClick: (Article?) -> (Unit)) {
         itemView
             .also { view ->
-                view.title.text = article?.title ?:""
-                view.content.text = article?.content?:""
+                view.title.text = article?.title
+                view.content.text = article?.content
             }.also { view ->
                 Picasso.with(view.context)
                     .load(article?.image)
+                    .placeholder(R.drawable.ic_news_placeholder)
                     .into(itemView.newsImage)
             }.also { view ->
                 view.setOnClickListener {

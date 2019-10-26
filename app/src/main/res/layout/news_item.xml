@@ -53,10 +53,9 @@
         android:contentDescription="@string/see_news_details"
         android:src="@drawable/ic_chevron_right"
         android:tint="@color/grey"
-        android:layout_marginLeft="@dimen/margin_10"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/newsImage"
+        app:layout_constraintLeft_toRightOf="@+id/title"
         app:layout_constraintRight_toRightOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

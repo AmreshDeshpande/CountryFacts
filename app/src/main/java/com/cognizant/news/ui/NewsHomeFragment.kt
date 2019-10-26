@@ -12,7 +12,7 @@ import com.cognizant.news.data.NewsViewModel
 import com.cognizant.news.data.NewsViewModelFactory
 import com.cognizant.news.data.model.Article
 import com.cognizant.news.dataprovider.NewsApiDataProvider
-import kotlinx.android.synthetic.main.news_fragment.*
+import kotlinx.android.synthetic.main.news_home_fragment.*
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.cognizant.news.R
 
@@ -32,7 +32,7 @@ class NewsHomeFragment(private val navigation :(Pair<FragmentName, Article?>) ->
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.news_fragment, container, false)
+        return inflater.inflate(R.layout.news_home_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -40,15 +40,18 @@ class NewsHomeFragment(private val navigation :(Pair<FragmentName, Article?>) ->
         viewModel =  ViewModelProviders
             .of(this, NewsViewModelFactory(NewsApiDataProvider()))
             .get(NewsViewModel::class.java)
-
         fetchNews()
         setupRecyclerView()
+        setUpSwipeToRefresh()
     }
 
     private fun fetchNews() {
+        progressBar.visibility = View.VISIBLE
         viewModel.getNewsData()?.observe(viewLifecycleOwner, Observer { newsList ->
             newsAdapter.newsData = newsList
             newsAdapter.notifyDataSetChanged()
+            swipeRefresh.isRefreshing = false
+            progressBar.visibility = View.GONE
         })
         viewModel.getNews()
     }
@@ -60,6 +63,13 @@ class NewsHomeFragment(private val navigation :(Pair<FragmentName, Article?>) ->
            layoutManager = linearLayoutManager
             newsAdapter = NewsAdapter(itemClick)
             adapter =  newsAdapter
+        }
+    }
+
+    private fun setUpSwipeToRefresh() {
+        progressBar.visibility = View.GONE
+        swipeRefresh.setOnRefreshListener {
+            fetchNews()
         }
     }
 

@@ -46,6 +46,7 @@ class NewsActivity : AppCompatActivity() {
                     arguments = Bundle().apply {
                         putParcelable(NEWS_PARAM, pair.second)
                         mCurrentFragment = newsDetailFragment
+                        supportActionBar?.title = pair.second?.title
                     }
                 }
             }
@@ -63,6 +64,7 @@ class NewsActivity : AppCompatActivity() {
             //Pop NewsDetails Fragment
             supportFragmentManager.popBackStackImmediate()
             mCurrentFragment = newsHomeFragment
+            supportActionBar?.title = getString(R.string.app_name)
             supportActionBar?.setDisplayHomeAsUpEnabled(false)
         } else {
             finish()
