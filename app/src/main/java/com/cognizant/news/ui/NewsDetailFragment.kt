@@ -42,7 +42,6 @@ class NewsDetailFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.news_detail_fragment, container, false)
     }
 

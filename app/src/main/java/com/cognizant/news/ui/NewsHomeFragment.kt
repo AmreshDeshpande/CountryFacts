@@ -1,5 +1,6 @@
 package com.cognizant.news.ui
 
+import android.content.Context
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -17,7 +18,10 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.cognizant.news.R
 
 
-class NewsHomeFragment(private val navigation :(Pair<FragmentName, Article?>) -> (Unit) ) : Fragment() {
+class NewsHomeFragment : Fragment() {
+
+    // This is the instance of our parent activity's interface that we define here
+    private var mListener: OnFragmentInteractionListener? = null
 
     private lateinit var viewModel: NewsViewModel
 
@@ -25,7 +29,7 @@ class NewsHomeFragment(private val navigation :(Pair<FragmentName, Article?>) ->
 
     //Handle item click
     private var itemClick: (Article?) -> (Unit) = { news ->
-        navigation.invoke(Pair(FragmentName.NewsDetails, news))
+        mListener?.onNavigation(Pair(FragmentName.NewsDetails, news))
     }
 
     override fun onCreateView(
@@ -43,6 +47,19 @@ class NewsHomeFragment(private val navigation :(Pair<FragmentName, Article?>) ->
         fetchNews()
         setupRecyclerView()
         setUpSwipeToRefresh()
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        if (context is OnFragmentInteractionListener) {
+            mListener = context
+        } else {
+            throw RuntimeException(context!!.toString() + " must implement OnFragmentInteractionListener")
+        }
+    }
+    override fun onDetach() {
+        super.onDetach()
+        mListener = null
     }
 
     private fun fetchNews() {
@@ -71,6 +88,13 @@ class NewsHomeFragment(private val navigation :(Pair<FragmentName, Article?>) ->
         swipeRefresh.setOnRefreshListener {
             fetchNews()
         }
+    }
+
+    /**
+     * Define the methods to update parent Activity.
+     */
+    interface OnFragmentInteractionListener {
+        fun onNavigation(fragmentDetailsPair : Pair<FragmentName, Article?>)
     }
 
 }

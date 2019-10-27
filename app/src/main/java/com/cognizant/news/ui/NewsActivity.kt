@@ -12,7 +12,7 @@ enum class FragmentName {
     NewsDetails
 }
 
-class NewsActivity : AppCompatActivity() {
+class NewsActivity : AppCompatActivity(), NewsHomeFragment.OnFragmentInteractionListener {
 
     private lateinit var mCurrentFragment: Fragment
 
@@ -26,7 +26,7 @@ class NewsActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         if (savedInstanceState == null) {
-            newsHomeFragment = NewsHomeFragment(navigation)
+            newsHomeFragment = NewsHomeFragment()
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, newsHomeFragment)
                 .addToBackStack(null)
@@ -35,18 +35,17 @@ class NewsActivity : AppCompatActivity() {
         }
     }
 
-    private val navigation: (Pair<FragmentName, Article?>) -> (Unit) = { pair ->
-
-        when (pair.first.ordinal) {
+    override fun onNavigation(fragmentDetailsPair: Pair<FragmentName, Article?>) {
+        when (fragmentDetailsPair.first.ordinal) {
 
             //navigate to NewsDetailsFragment
             FragmentName.NewsDetails.ordinal -> {
                 newsDetailFragment = NewsDetailFragment()
                 newsDetailFragment.apply {
                     arguments = Bundle().apply {
-                        putParcelable(NEWS_PARAM, pair.second)
+                        putParcelable(NEWS_PARAM, fragmentDetailsPair.second)
                         mCurrentFragment = newsDetailFragment
-                        supportActionBar?.title = pair.second?.title
+                        supportActionBar?.title = fragmentDetailsPair.second?.title
                     }
                 }
             }
@@ -63,12 +62,15 @@ class NewsActivity : AppCompatActivity() {
         if (mCurrentFragment is NewsDetailFragment) {
             //Pop NewsDetails Fragment
             supportFragmentManager.popBackStackImmediate()
-            mCurrentFragment = newsHomeFragment
-            supportActionBar?.title = getString(R.string.app_name)
-            supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            setCurrentFragmentToHome()
         } else {
             finish()
         }
     }
 
+    private fun setCurrentFragmentToHome(){
+        mCurrentFragment = newsHomeFragment
+        supportActionBar?.title = getString(R.string.app_name)
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+    }
 }
