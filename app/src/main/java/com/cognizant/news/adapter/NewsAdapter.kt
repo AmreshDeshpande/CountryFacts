@@ -38,8 +38,12 @@ class NewsItemViewHolder(newItemView: View) : RecyclerView.ViewHolder(newItemVie
     fun bind(article: Article?, itemClick: (Article?) -> (Unit)) {
         itemView
             .also { view ->
-                view.title.text = article?.title?: itemView.context.getString(R.string.news_content_unavailable)
-                view.content.text = article?.content
+                view.title.text = article?.title
+                if(article?.content.isNullOrEmpty()){
+                    view.content.text = itemView.context.getString(R.string.news_content_unavailable)
+                }else{
+                    view.content.text = article?.title
+                }
             }.also { view ->
                 Picasso.with(view.context)
                     .load(article?.image)

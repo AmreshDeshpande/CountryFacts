@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.cognizant.news.adapter.NewsAdapter
 import com.cognizant.news.data.NewsViewModel
@@ -17,17 +18,17 @@ import kotlinx.android.synthetic.main.news_home_fragment.*
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.cognizant.news.R
 import com.cognizant.news.data.DataState
+import com.cognizant.news.databinding.NewsHomeFragmentBinding
 import com.cognizant.news.utils.NetworkUtility
 import com.cognizant.news.utils.showSnackBar
 import kotlinx.android.synthetic.main.no_connection.*
-
 
 class NewsHomeFragment : Fragment() {
 
     // This is the instance of our parent activity's interface that we define here
     private var mListener: OnFragmentInteractionListener? = null
 
-    private lateinit var viewModel: NewsViewModel
+    private lateinit var newsViewModel: NewsViewModel
 
     private lateinit var newsAdapter :NewsAdapter
 
@@ -40,52 +41,40 @@ class NewsHomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.news_home_fragment, container, false)
+        newsViewModel =  ViewModelProviders
+            .of(this, NewsViewModelFactory(NewsApiDataProvider()))
+            .get(NewsViewModel::class.java)
+        //Data binding
+        val binding: NewsHomeFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.news_home_fragment,container,false)
+        val view = binding.root
+        binding.newsViewModel = newsViewModel
+        binding.lifecycleOwner = activity
+        return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel =  ViewModelProviders
-            .of(this, NewsViewModelFactory(NewsApiDataProvider()))
-            .get(NewsViewModel::class.java)
         fetchNews()
         setupRecyclerView()
         setUpSwipeToRefresh()
         setUpNetworkListener()
     }
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            mListener = context
-        } else {
-            throw RuntimeException(context!!.toString() + " must implement OnFragmentInteractionListener")
-        }
-    }
-    override fun onDetach() {
-        super.onDetach()
-        mListener = null
-    }
-
     private fun fetchNews() {
-        viewModel.getNewsData()?.observe(viewLifecycleOwner, Observer { newsDataStatus ->
+        newsViewModel.getNewsData()?.observe(viewLifecycleOwner, Observer { newsDataStatus ->
             when (newsDataStatus) {
-                is DataState.Loading ->{
-                    progressBar.visibility = View.VISIBLE
-                }
+
                 is DataState.Success -> {
                     newsAdapter.newsData = newsDataStatus.newsData
                     newsAdapter.notifyDataSetChanged()
                     swipeRefresh.isRefreshing = false
-                    progressBar.visibility = View.GONE
                 }
                 is DataState.Error -> {
-                    progressBar.visibility = View.GONE
                     homeFragmentContainer.showSnackBar(newsDataStatus.error.errorMessage)
                 }
             }
         })
-        viewModel.getNews()
+        newsViewModel.getNews()
     }
 
     private fun setupRecyclerView() {
@@ -99,10 +88,23 @@ class NewsHomeFragment : Fragment() {
     }
 
     private fun setUpSwipeToRefresh() {
-        progressBar.visibility = View.GONE
+       // progressBar.visibility = View.GONE
         swipeRefresh.setOnRefreshListener {
             fetchNews()
         }
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        if (context is OnFragmentInteractionListener) {
+            mListener = context
+        } else {
+            throw RuntimeException(context!!.toString() + " must implement OnFragmentInteractionListener")
+        }
+    }
+    override fun onDetach() {
+        super.onDetach()
+        mListener = null
     }
 
     /**
@@ -122,14 +124,14 @@ class NewsHomeFragment : Fragment() {
                     noConnectionLayout.visibility = View.VISIBLE
                 } else {
                     recyclerView.visibility = View.VISIBLE
-                    progressBar.visibility = View.GONE
+                    //progressBar.visibility = View.GONE
                     noConnectionLayout.visibility = View.GONE
                 }
             }
         })
 
         tryAgainBtn.setOnClickListener {
-            viewModel.getNews()
+            newsViewModel.getNews()
         }
     }
 
