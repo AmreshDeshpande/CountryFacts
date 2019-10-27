@@ -32,7 +32,7 @@ class NewsDetailFragment: Fragment() {
         newsDetailImage.let { imageView ->
             Picasso.with(activity)
                 .load(article?.image)
-                .into(newsDetailImage)
+                .into(imageView)
         }
         newsDetailContent.text = article?.content
     }

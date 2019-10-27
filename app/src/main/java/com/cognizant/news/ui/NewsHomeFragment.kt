@@ -16,6 +16,10 @@ import com.cognizant.news.dataprovider.NewsApiDataProvider
 import kotlinx.android.synthetic.main.news_home_fragment.*
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.cognizant.news.R
+import com.cognizant.news.data.DataState
+import com.cognizant.news.utils.NetworkUtility
+import com.cognizant.news.utils.showSnackBar
+import kotlinx.android.synthetic.main.no_connection.*
 
 
 class NewsHomeFragment : Fragment() {
@@ -27,7 +31,7 @@ class NewsHomeFragment : Fragment() {
 
     private lateinit var newsAdapter :NewsAdapter
 
-    //Handle item click
+    //Handle list item click
     private var itemClick: (Article?) -> (Unit) = { news ->
         mListener?.onNavigation(Pair(FragmentName.NewsDetails, news))
     }
@@ -47,6 +51,7 @@ class NewsHomeFragment : Fragment() {
         fetchNews()
         setupRecyclerView()
         setUpSwipeToRefresh()
+        setUpNetworkListener()
     }
 
     override fun onAttach(context: Context?) {
@@ -63,12 +68,22 @@ class NewsHomeFragment : Fragment() {
     }
 
     private fun fetchNews() {
-        progressBar.visibility = View.VISIBLE
-        viewModel.getNewsData()?.observe(viewLifecycleOwner, Observer { newsList ->
-            newsAdapter.newsData = newsList
-            newsAdapter.notifyDataSetChanged()
-            swipeRefresh.isRefreshing = false
-            progressBar.visibility = View.GONE
+        viewModel.getNewsData()?.observe(viewLifecycleOwner, Observer { newsDataStatus ->
+            when (newsDataStatus) {
+                is DataState.Loading ->{
+                    progressBar.visibility = View.VISIBLE
+                }
+                is DataState.Success -> {
+                    newsAdapter.newsData = newsDataStatus.newsData
+                    newsAdapter.notifyDataSetChanged()
+                    swipeRefresh.isRefreshing = false
+                    progressBar.visibility = View.GONE
+                }
+                is DataState.Error -> {
+                    progressBar.visibility = View.GONE
+                    homeFragmentContainer.showSnackBar(newsDataStatus.error.errorMessage)
+                }
+            }
         })
         viewModel.getNews()
     }
@@ -95,6 +110,27 @@ class NewsHomeFragment : Fragment() {
      */
     interface OnFragmentInteractionListener {
         fun onNavigation(fragmentDetailsPair : Pair<FragmentName, Article?>)
+    }
+
+    private fun setUpNetworkListener() {
+
+        NetworkUtility.registerNetworkCallback()
+        NetworkUtility.observe(this, Observer { connection ->
+            connection?.let {
+                if (!connection) {
+                    recyclerView.visibility = View.GONE
+                    noConnectionLayout.visibility = View.VISIBLE
+                } else {
+                    recyclerView.visibility = View.VISIBLE
+                    progressBar.visibility = View.GONE
+                    noConnectionLayout.visibility = View.GONE
+                }
+            }
+        })
+
+        tryAgainBtn.setOnClickListener {
+            viewModel.getNews()
+        }
     }
 
 }

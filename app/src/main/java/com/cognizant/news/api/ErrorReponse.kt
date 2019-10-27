@@ -6,7 +6,7 @@ import retrofit2.HttpException
 
 class ErrorResponse constructor(throwable: Throwable) {
 
-    private var errorMessage: String
+    var errorMessage: String
 
     init {
         errorMessage = when (throwable) {

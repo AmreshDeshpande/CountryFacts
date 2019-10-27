@@ -4,26 +4,26 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.cognizant.news.data.model.News
 import com.cognizant.news.dataprovider.NewsDataRepository
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
 class NewsViewModel(private val newsDataRepository :NewsDataRepository) : ViewModel() {
 
-    private val newsData: MutableLiveData<News>? = MutableLiveData()
+    private val newsDataState: MutableLiveData<DataState>? = MutableLiveData()
 
     //Exposing live data to view and not Mutable live status
-    fun getNewsData(): LiveData<News>? = newsData
+    fun getNewsData(): LiveData<DataState>? = newsDataState
 
     fun getNews(){
+        newsDataState?.value = DataState.Loading
         viewModelScope.launch {
             newsDataRepository.getNews(
                 success = { news ->
-                    newsData?.value = news
+                    newsDataState?.value = DataState.Success(news)
                 },
-                failure = {
-
+                failure = { error ->
+                    newsDataState?.value = DataState.Error(error)
                 }
             )
         }
