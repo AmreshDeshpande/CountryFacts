@@ -14,8 +14,6 @@ enum class FragmentName {
 
 class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteractionListener {
 
-    private lateinit var mCurrentFragment: Fragment
-
     private lateinit var factsHomeFragment: FactsHomeFragment
 
     private lateinit var factsDetailFragment: FactsDetailFragment
@@ -34,7 +32,6 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
                 .replace(R.id.container, factsHomeFragment)
                 .addToBackStack(null)
                 .commit()
-            mCurrentFragment = factsHomeFragment
         }
     }
 
@@ -47,7 +44,6 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
                 factsDetailFragment.apply {
                     arguments = Bundle().apply {
                         putParcelable(FACTS_PARAM, fragmentDetailsPair.second)
-                        mCurrentFragment = factsDetailFragment
                         supportActionBar?.title = fragmentDetailsPair.second?.title
                     }
                 }
@@ -55,7 +51,7 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
         }
 
         supportFragmentManager.beginTransaction()
-            .add(R.id.container, mCurrentFragment)
+            .add(R.id.container, factsDetailFragment)
             .addToBackStack(null)
             .commit()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -77,7 +73,7 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
     }
 
     private fun setCurrentFragmentToHome(){
-        mCurrentFragment = factsHomeFragment
+       // mCurrentFragment = factsHomeFragment
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         supportActionBar?.title = title
     }
