@@ -3,54 +3,121 @@ package com.cognizant.facts.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.cognizant.facts.data.model.Fact
-import com.cognizant.facts.data.model.Country
 import kotlinx.android.synthetic.main.facts_item.view.*
 import com.cognizant.facts.R
 import com.squareup.picasso.Picasso
 
 
 class FactsAdapter(private val itemClick: (Fact?) -> (Unit)) :
-    RecyclerView.Adapter<FactsItemViewHolder>() {
+    RecyclerView.Adapter<FactsAdapter.BaseViewHolder<Fact?>>() {
 
-    var countryData: Country? = null
+    companion object {
+        const val FactItem = 0
+        const val FactItemWithNoDescription = 1
+        const val FactItemWithNoImage = 2
+    }
 
-    override fun onCreateViewHolder(parentView: ViewGroup, viewType: Int): FactsItemViewHolder {
-        val itemView =
-            LayoutInflater.from(parentView.context).inflate(R.layout.facts_item, parentView, false)
-        return FactsItemViewHolder(itemView)
+    var factList: List<Fact>? = null
+
+    override fun onCreateViewHolder(parentView: ViewGroup, viewType: Int): BaseViewHolder<Fact?> {
+
+        return when (viewType) {
+            FactItem -> {
+                val itemView =
+                    LayoutInflater.from(parentView.context).inflate(R.layout.facts_item, parentView, false)
+                FactsItemViewHolder(itemView)}
+
+            FactItemWithNoDescription -> {
+                val itemView =
+                    LayoutInflater.from(parentView.context).inflate(R.layout.facts_item_no_description, parentView, false)
+                FactsItemNoDescriptionViewHolder(itemView)}
+
+            FactItemWithNoImage -> {
+                val itemView =
+                    LayoutInflater.from(parentView.context).inflate(R.layout.facts_item_no_image, parentView, false)
+                FactsItemNoImageViewHolder(itemView)
+            }
+
+            else -> throw IllegalArgumentException("Invalid view type")
+        }
     }
 
     override fun getItemCount(): Int {
-        return countryData?.factList?.size ?: 0
+        return factList?.size ?: 0
     }
 
-    override fun onBindViewHolder(factsItemViewHolder: FactsItemViewHolder, position: Int) {
-        val article = countryData?.factList?.get(position)
-        factsItemViewHolder.bind(article, itemClick)
+    override fun onBindViewHolder(holder: BaseViewHolder<Fact?>, position: Int) {
+        val article = factList?.get(position)
+        holder.bind(article, itemClick)
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return factList?.get(position)?.itemType?:throw IllegalArgumentException("Invalid view type")
+    }
+
+    abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        abstract fun bind(item: T, itemClick: (Fact?) -> (Unit))
+    }
+
+    inner class FactsItemViewHolder(newItemView: View) : BaseViewHolder<Fact?>(newItemView) {
+        override fun bind(fact: Fact?, itemClick: (Fact?) -> Unit) {
+            itemView
+                .also { view ->
+                    view.title.text = fact?.title
+                    view.description.text = fact?.description
+                }.also { view ->
+                    fact?.image?.let { url ->
+                        Picasso.with(view.context)
+                            .load(url)
+                            .fit().centerInside()
+                            .error(R.drawable.place_holder)
+                            .into(view.factImage)
+
+                    }
+                }.also { view ->
+                    view.setOnClickListener {
+                        itemClick.invoke(fact)
+                    }
+                }
+        }
+    }
+
+    inner class FactsItemNoDescriptionViewHolder(newItemView: View) : BaseViewHolder<Fact?>(newItemView) {
+        override fun bind(fact: Fact?, itemClick: (Fact?) -> Unit) {
+            itemView
+                .also { view ->
+                    view.title.text = fact?.title
+                }.also { view ->
+                    fact?.image?.let { url ->
+                        Picasso.with(view.context)
+                            .load(url)
+                            .error(R.drawable.place_holder)
+                            .into(view.factImage)
+                    }
+                }.also { view ->
+                    view.setOnClickListener {
+                        itemClick.invoke(fact)
+                    }
+                }
+        }
+    }
+    inner class FactsItemNoImageViewHolder(newItemView: View) : BaseViewHolder<Fact?>(newItemView) {
+        override fun bind(fact: Fact?, itemClick: (Fact?) -> Unit) {
+            itemView
+                .also { view ->
+                    view.title.text = fact?.title
+                    view.description.text = fact?.description
+                }.also { view ->
+                    view.setOnClickListener {
+                        itemClick.invoke(fact)
+                    }
+                }
+        }
+    }
 }
 
-class FactsItemViewHolder(newItemView: View) : RecyclerView.ViewHolder(newItemView) {
 
-    fun bind(fact: Fact?, itemClick: (Fact?) -> (Unit)) {
-        itemView
-            .also { view ->
-                view.title.text = fact?.title
-                  view.content.text = fact?.description
-            }.also { view ->
-                fact?.image?.let { url ->
-                    Picasso.with(view.context)
-                        .load(fact?.image)
-                        .into(view.factImage)
-                }
 
-            }.also { view ->
-                view.setOnClickListener {
-                    itemClick.invoke(fact)
-                }
-            }
-    }
-}

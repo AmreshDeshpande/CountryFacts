@@ -15,34 +15,21 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Yes, we can do that by using a vector file. In order to add this functionality in a mobile application."
         style="@style/FactTitle"
-        android:layout_marginEnd="@dimen/margin_10" />
+        android:layout_marginEnd="@dimen/margin_30"
+        />
 
     <TextView
         android:id="@+id/description"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintWidth_percent="0.6"
-        app:layout_constraintLeft_toLeftOf="@+id/title"
-        app:layout_constraintRight_toLeftOf="@+id/factImage"
         app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintLeft_toLeftOf="@+id/title"
+        android:layout_marginEnd="@dimen/margin_30"
+        android:maxLines="4"
+        android:ellipsize="end"
         tools:text="yes, we can do that by using a vector file. In order to add this functionality in a mobile application, Android Studio includes a tool called the Vector Asset Studio that is used to add some predefined material icons along with your own"
         style="@style/FactDescription"
        />
-
-    <ImageView
-        android:id="@+id/factImage"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.8"
-        app:layout_constraintWidth_percent="0.3"
-        android:contentDescription="@string/facts_image"
-        app:layout_constraintBottom_toBottomOf="@+id/description"
-        app:layout_constraintLeft_toRightOf="@+id/description"
-        app:layout_constraintRight_toLeftOf="@+id/rightArrow"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        android:scaleType="fitCenter"
-        android:adjustViewBounds="true"
-        />
 
     <ImageView
         android:id="@+id/rightArrow"

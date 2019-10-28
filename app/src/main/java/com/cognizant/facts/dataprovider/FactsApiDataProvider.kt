@@ -13,7 +13,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class FactsApiDataProvider : FactsDataRepository {
 
-
     private val retrofit = Retrofit.Builder()
     .baseUrl(Constants.BASE_URL)
     .client(OkHttpClient())

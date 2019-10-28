@@ -9,37 +9,27 @@
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="match_parent"
+        app:layout_constraintWidth_percent="0.6"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Yes, we can do that by using a vector file. In order to add this functionality in a mobile application."
         style="@style/FactTitle"
-        android:layout_marginEnd="@dimen/margin_10" />
-
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintWidth_percent="0.6"
-        app:layout_constraintLeft_toLeftOf="@+id/title"
-        app:layout_constraintRight_toLeftOf="@+id/factImage"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        tools:text="yes, we can do that by using a vector file. In order to add this functionality in a mobile application, Android Studio includes a tool called the Vector Asset Studio that is used to add some predefined material icons along with your own"
-        style="@style/FactDescription"
-       />
+        android:layout_marginEnd="@dimen/margin_10"
+        />
 
     <ImageView
         android:id="@+id/factImage"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/image_height_short"
         app:layout_constraintHeight_percent="0.8"
         app:layout_constraintWidth_percent="0.3"
         android:contentDescription="@string/facts_image"
         app:layout_constraintBottom_toBottomOf="@+id/description"
-        app:layout_constraintLeft_toRightOf="@+id/description"
+        app:layout_constraintLeft_toRightOf="@+id/title"
         app:layout_constraintRight_toLeftOf="@+id/rightArrow"
-        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintTop_toTopOf="@+id/title"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"
         />
@@ -47,7 +37,7 @@
     <ImageView
         android:id="@+id/rightArrow"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/image_height_short"
         android:contentDescription="@string/see_fact_details"
         android:src="@drawable/ic_chevron_right"
         android:tint="@color/grey"

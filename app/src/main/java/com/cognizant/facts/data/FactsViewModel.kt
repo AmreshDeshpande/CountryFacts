@@ -20,6 +20,7 @@ class FactsViewModel(private val factsDataRepository :FactsDataRepository) : Vie
         viewModelScope.launch {
             factsDataRepository.getFacts(
                 success = { facts ->
+                    facts
                     factsDataState?.value = DataState.Success(facts)
                 },
                 failure = { error ->

@@ -20,6 +20,8 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
 
     private lateinit var factsDetailFragment: FactsDetailFragment
 
+    private var title :String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.facts_activity)
@@ -58,6 +60,11 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
+    override fun setActionBarTitle(title: String) {
+        supportActionBar?.title = title
+        this.title = title
+    }
+
     override fun onBackPressed() {
         if (mCurrentFragment is FactsDetailFragment) {
             //Pop FactsDetails Fragment
@@ -70,7 +77,7 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
 
     private fun setCurrentFragmentToHome(){
         mCurrentFragment = factsHomeFragment
-        supportActionBar?.title = getString(R.string.app_name)
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        supportActionBar?.title = title
     }
 }

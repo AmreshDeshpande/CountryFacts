@@ -20,6 +20,7 @@ import com.cognizant.facts.R
 import com.cognizant.facts.data.DataState
 import com.cognizant.facts.databinding.FactsHomeFragmentBinding
 import com.cognizant.facts.utils.NetworkUtility
+import com.cognizant.facts.utils.mapItemType
 import com.cognizant.facts.utils.showSnackBar
 import kotlinx.android.synthetic.main.no_connection.*
 
@@ -54,18 +55,19 @@ class FactsHomeFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        fetchfacts()
+        fetchFacts()
         setupRecyclerView()
         setUpSwipeToRefresh()
         setUpNetworkListener()
     }
 
-    private fun fetchfacts() {
+    private fun fetchFacts() {
         factsViewModel.getCountryData()?.observe(viewLifecycleOwner, Observer { factsDataStatus ->
             when (factsDataStatus) {
 
                 is DataState.Success -> {
-                    factsAdapter.countryData = factsDataStatus.countryData
+                    mListener?.setActionBarTitle(factsDataStatus.countryData?.title?:"")
+                    factsAdapter.factList = factsDataStatus.countryData?.factList?.mapItemType()
                     factsAdapter.notifyDataSetChanged()
                     swipeRefresh.isRefreshing = false
                 }
@@ -88,9 +90,8 @@ class FactsHomeFragment : Fragment() {
     }
 
     private fun setUpSwipeToRefresh() {
-       // progressBar.visibility = View.GONE
         swipeRefresh.setOnRefreshListener {
-            fetchfacts()
+            fetchFacts()
         }
     }
 
@@ -98,6 +99,7 @@ class FactsHomeFragment : Fragment() {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
             mListener = context
+
         } else {
             throw RuntimeException(context!!.toString() + " must implement OnFragmentInteractionListener")
         }
@@ -112,6 +114,8 @@ class FactsHomeFragment : Fragment() {
      */
     interface OnFragmentInteractionListener {
         fun onNavigation(fragmentDetailsPair : Pair<FragmentName, Fact?>)
+
+        fun setActionBarTitle(title: String)
     }
 
     private fun setUpNetworkListener() {
@@ -124,7 +128,6 @@ class FactsHomeFragment : Fragment() {
                     noConnectionLayout.visibility = View.VISIBLE
                 } else {
                     recyclerView.visibility = View.VISIBLE
-                    //progressBar.visibility = View.GONE
                     noConnectionLayout.visibility = View.GONE
                 }
             }
