@@ -4,7 +4,7 @@ import com.cognizant.facts.ui.FactsHomeFragment
 import dagger.Component
 
 @Component(modules = [FactsModule::class])
-interface NewsComponent {
+interface FactsComponent {
 
     fun inject(factsHomeFragment: FactsHomeFragment)
 

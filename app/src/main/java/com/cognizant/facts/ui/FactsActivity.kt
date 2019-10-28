@@ -28,6 +28,7 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
         setSupportActionBar(toolbar)
 
         if (savedInstanceState == null) {
+            supportActionBar?.title = ""
             factsHomeFragment = FactsHomeFragment()
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, factsHomeFragment)
@@ -66,11 +67,11 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
     }
 
     override fun onBackPressed() {
-        if (mCurrentFragment is FactsDetailFragment) {
+        if(supportFragmentManager.backStackEntryCount > 0){
             //Pop FactsDetails Fragment
             supportFragmentManager.popBackStackImmediate()
             setCurrentFragmentToHome()
-        } else {
+        }else{
             finish()
         }
     }

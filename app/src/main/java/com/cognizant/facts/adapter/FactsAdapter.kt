@@ -3,13 +3,11 @@ package com.cognizant.facts.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.cognizant.facts.data.model.Fact
 import kotlinx.android.synthetic.main.facts_item.view.*
 import com.cognizant.facts.R
 import com.squareup.picasso.Picasso
-
 
 class FactsAdapter(private val itemClick: (Fact?) -> (Unit)) :
     RecyclerView.Adapter<FactsAdapter.BaseViewHolder<Fact?>>() {
@@ -75,7 +73,6 @@ class FactsAdapter(private val itemClick: (Fact?) -> (Unit)) :
                             .fit().centerInside()
                             .error(R.drawable.place_holder)
                             .into(view.factImage)
-
                     }
                 }.also { view ->
                     view.setOnClickListener {

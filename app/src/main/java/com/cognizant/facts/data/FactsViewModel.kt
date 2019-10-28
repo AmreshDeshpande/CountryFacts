@@ -41,5 +41,4 @@ class FactsViewModelFactory(private val factsDataRepository :FactsDataRepository
             throw IllegalArgumentException("ViewModel Not Found")
         }
     }
-
 }

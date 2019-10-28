@@ -19,32 +19,48 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.cognizant.facts.R
 import com.cognizant.facts.data.DataState
 import com.cognizant.facts.databinding.FactsHomeFragmentBinding
+import com.cognizant.facts.di.DaggerFactsComponent
+import com.cognizant.facts.di.FactsModule
 import com.cognizant.facts.utils.NetworkUtility
 import com.cognizant.facts.utils.mapItemType
 import com.cognizant.facts.utils.showSnackBar
 import kotlinx.android.synthetic.main.no_connection.*
+import javax.inject.Inject
 
 class FactsHomeFragment : Fragment() {
 
-    // This is the instance of our parent activity's interface that we define here
+    @Inject
+    lateinit var factsViewModel: FactsViewModel
+
+    @Inject
+     lateinit var factsAdapter :FactsAdapter
+
+    // This is the instance of our parent activity's interface to update from fragment
     private var mListener: OnFragmentInteractionListener? = null
 
-    private lateinit var factsViewModel: FactsViewModel
-
-    private lateinit var factsAdapter :FactsAdapter
 
     //Handle list item click
-    private var itemClick: (Fact?) -> (Unit) = { fact ->
+     var itemClick: (Fact?) -> (Unit) = { fact ->
         mListener?.onNavigation(Pair(FragmentName.FactsDetails, fact))
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        DaggerFactsComponent
+            .builder()
+            .factsModule(FactsModule(this))
+            .build()
+            .inject(this)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        factsViewModel =  ViewModelProviders
-            .of(this, FactsViewModelFactory(FactsApiDataProvider()))
-            .get(FactsViewModel::class.java)
+//        factsViewModel =  ViewModelProviders
+//            .of(this, FactsViewModelFactory(FactsApiDataProvider()))
+//            .get(FactsViewModel::class.java)
         //Data binding
         val binding: FactsHomeFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.facts_home_fragment,container,false)
         val view = binding.root

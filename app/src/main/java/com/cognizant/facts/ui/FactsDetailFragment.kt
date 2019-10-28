@@ -32,7 +32,6 @@ class FactsDetailFragment: Fragment() {
         factDetailImage.let { imageView ->
             Picasso.with(activity)
                 .load(fact?.image)
-                .error(R.drawable.ic_placeholder_canada)
                 .into(imageView)
         }
         factDetailContent.text = fact?.description
