@@ -2,12 +2,11 @@ package com.cognizant.facts.ui
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
-import androidx.test.runner.AndroidJUnit4
 import com.cognizant.facts.EspressoIdlingResource
 import org.hamcrest.Description
 import org.hamcrest.Matcher
@@ -16,30 +15,47 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.RootMatchers
 import com.cognizant.facts.R
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.annotation.UiThreadTest
 import kotlinx.android.synthetic.main.facts_home_fragment.*
 import org.hamcrest.Matchers
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import com.cognizant.facts.data.DataState
 import org.hamcrest.CoreMatchers.allOf
 
-@LargeTest
-@RunWith(AndroidJUnit4::class)
-class FactsActivityTest {
-
+class FactsActivityRecyclerTest {
     @Rule
     @JvmField
-    var mActivityTestRule = ActivityTestRule(FactsActivity::class.java)
+    var mActivityTestRule: ActivityTestRule<FactsActivity> =
+        object : ActivityTestRule<FactsActivity>(FactsActivity::class.java) {
+            override fun afterActivityLaunched() {
+                super.afterActivityLaunched()
+                IdlingRegistry.getInstance()
+                    .register(EspressoIdlingResource.mCountingIdlingResource)
+                EspressoIdlingResource.increment()
+            }
+        }
 
     @Before
-    fun setUp() {
-        IdlingRegistry.getInstance().register(EspressoIdlingResource.mCountingIdlingResource)
-        Thread.sleep(10000)
+    @UiThreadTest
+    fun setUp(){
+        val factsHomeFragment: FactsHomeFragment =
+            mActivityTestRule.activity.supportFragmentManager.fragments[0] as FactsHomeFragment
+        factsHomeFragment.factsViewModel.getCountryDataState()?.observe(mActivityTestRule.activity, Observer {
+            when (it) {
+                is DataState.Success -> {
+                    EspressoIdlingResource.decrement()
+                }
+                is DataState.Error -> {
+                    EspressoIdlingResource.decrement()
+                }
+            }
+        })
     }
 
     @Test
@@ -55,7 +71,6 @@ class FactsActivityTest {
     @Test
     fun testCaseForRecyclerItemView() {
         onView(withText("About Canada")).check(matches(isDisplayed()))
-
 
         //Check title
         val textView = onView(
@@ -124,14 +139,18 @@ class FactsActivityTest {
 
     @Test
     fun testCaseForRecyclerClick() {
-        Thread.sleep(10000)
         onView(withId(R.id.recyclerView))
             .inRoot(
                 RootMatchers.withDecorView(
                     Matchers.`is`(mActivityTestRule.activity.window.decorView)
                 )
             )
-            .perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+            .perform(
+                RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                    0,
+                    click()
+                )
+            )
     }
 
     @Test
