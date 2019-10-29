@@ -6,11 +6,6 @@ import com.cognizant.facts.R
 import com.cognizant.facts.feature.data.model.Fact
 import kotlinx.android.synthetic.main.facts_activity.*
 
-// Currently there is only one Fragment to navigate in App. In Future can have additional Fragments
-enum class FragmentName {
-    FactsDetails
-}
-
 class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteractionListener {
 
     private lateinit var factsHomeFragment: FactsHomeFragment
@@ -18,7 +13,6 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
     private lateinit var factsDetailFragment: FactsDetailFragment
 
     private var homeTitle: String? = null
-    private var detailsTitle: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,32 +28,21 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
                 .commit()
         } else {
             homeTitle = savedInstanceState.getString("title")
-            detailsTitle = savedInstanceState.getString("detailsTitle")
             if (supportFragmentManager.backStackEntryCount > 1) {
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                setActionBarTitle(detailsTitle ?: "")
             } else {
-                setActionBarTitle(title = homeTitle ?: "")
+                setToolBarHomeTitle(title = homeTitle ?: "")
             }
         }
     }
 
-    override fun onNavigation(fragmentDetailsPair: Pair<FragmentName, Fact?>) {
-        when (fragmentDetailsPair.first.ordinal) {
-
-            //navigate to FactsDetailsFragment
-            FragmentName.FactsDetails.ordinal -> {
-                factsDetailFragment = FactsDetailFragment()
-                factsDetailFragment.apply {
-                    arguments = Bundle().apply {
-                        putParcelable(FACTS_PARAM, fragmentDetailsPair.second)
-                        detailsTitle = fragmentDetailsPair.second?.title
-                        supportActionBar?.title = fragmentDetailsPair.second?.title
-                    }
-                }
+    override fun navigationToDetailFragment(fact: Fact?) {
+        factsDetailFragment = FactsDetailFragment()
+        factsDetailFragment.apply {
+            arguments = Bundle().apply {
+                putParcelable(FACTS_PARAM, fact)
             }
         }
-
         supportFragmentManager.beginTransaction()
             .add(R.id.container, factsDetailFragment)
             .addToBackStack(null)
@@ -67,7 +50,7 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    override fun setActionBarTitle(title: String) {
+    override fun setToolBarHomeTitle(title: String) {
         homeTitle = title
         supportActionBar?.title = title
     }
@@ -90,6 +73,5 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
     public override fun onSaveInstanceState(savedInstanceState: Bundle) {
         super.onSaveInstanceState(savedInstanceState)
         savedInstanceState.putString("title", homeTitle)
-        savedInstanceState.putString("detailsTitle", detailsTitle)
     }
 }

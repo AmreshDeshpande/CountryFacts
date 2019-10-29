@@ -95,7 +95,7 @@ class FactsAdapter(private val itemClick: (Fact?) -> (Unit)) :
                 fact?.image?.let { url ->
                     Picasso.with(context)
                         .load(url)
-                        .error(R.drawable.place_holder)
+                       // .error(R.drawable.place_holder)
                         .into(factImage)
                 }
 

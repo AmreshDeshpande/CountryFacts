@@ -36,10 +36,9 @@ class FactsHomeFragment : Fragment() {
     // This is the instance of our parent activity's interface to update from fragment
     private var mListener: OnFragmentInteractionListener? = null
 
-
     //Handle list item click
     var itemClick: (Fact?) -> (Unit) = { fact ->
-        mListener?.onNavigation(Pair(FragmentName.FactsDetails, fact))
+        mListener?.navigationToDetailFragment(fact)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,24 +73,29 @@ class FactsHomeFragment : Fragment() {
     }
 
     private fun fetchFacts() {
-        factsViewModel.getCountryDataState()
-            ?.observe(viewLifecycleOwner, Observer { factsDataStatus ->
-                when (factsDataStatus) {
+            factsViewModel.getCountryDataState()
+                ?.observe(viewLifecycleOwner, Observer { factsDataStatus ->
+                    when (factsDataStatus) {
 
-                    is DataState.Success -> {
-                        mListener?.setActionBarTitle(factsDataStatus.countryData?.title ?: "")
-                        (activity as AppCompatActivity).supportActionBar?.title =
-                            factsDataStatus.countryData?.title ?: ""
-                        factsAdapter.factList = factsDataStatus.countryData?.factList?.mapItemType()
-                        factsAdapter.notifyDataSetChanged()
-                        swipeRefresh.isRefreshing = false
+                        is DataState.Success -> {
+                            if (fragmentManager?.backStackEntryCount == 1) {
+                                mListener?.setToolBarHomeTitle(
+                                    factsDataStatus.countryData?.title ?: ""
+                                )
+                            }
+
+                            factsAdapter.factList =
+                                factsDataStatus.countryData?.factList?.mapItemType()
+                            factsAdapter.notifyDataSetChanged()
+                            swipeRefresh.isRefreshing = false
+                        }
+                        is DataState.Error -> {
+                            homeFragmentContainer.showSnackBar(factsDataStatus.error.errorMessage)
+                        }
                     }
-                    is DataState.Error -> {
-                        homeFragmentContainer.showSnackBar(factsDataStatus.error.errorMessage)
-                    }
-                }
-            })
-        factsViewModel.getCountry()
+                })
+            factsViewModel.getCountry()
+
     }
 
     private fun setupRecyclerView() {
@@ -128,9 +132,9 @@ class FactsHomeFragment : Fragment() {
      * Define the methods to update parent Activity.
      */
     interface OnFragmentInteractionListener {
-        fun onNavigation(fragmentDetailsPair: Pair<FragmentName, Fact?>)
+        fun navigationToDetailFragment(fact: Fact?)
 
-        fun setActionBarTitle(title: String)
+        fun setToolBarHomeTitle(title: String)
     }
 
     private fun setUpNetworkListener() {

@@ -5,12 +5,13 @@ import com.cognizant.facts.feature.ui.FactsAdapter.Companion.FactItemWithNoImage
 import com.cognizant.facts.feature.data.model.Fact
 
 /**
- * Extension function to remove empty items(with null title) and decide item type based on null description or image
+ * Extension function to remove empty items(with null title) &
+ * decide item type based on null description or image
  */
 fun List<Fact>.mapItemType(): List<Fact> {
     //Remove empty items with null title
     val list = filter { fact ->
-        fact.title?.isNotEmpty() ?: true
+        fact.title?.isNotEmpty() ?: false
     }
 
     //Decide item type based on null description or image

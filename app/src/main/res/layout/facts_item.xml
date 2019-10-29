@@ -40,7 +40,7 @@
         app:layout_constraintLeft_toRightOf="@+id/description"
         app:layout_constraintRight_toLeftOf="@+id/rightArrow"
         app:layout_constraintTop_toBottomOf="@+id/title"
-        android:scaleType="fitCenter"
+        android:scaleType="fitXY"
         android:adjustViewBounds="true"
         />
 

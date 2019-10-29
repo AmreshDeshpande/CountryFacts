@@ -16,18 +16,18 @@ const val FACTS_PARAM = "facts_param"
 
 class FactsDetailFragment : Fragment() {
 
-    private var param: Fact? = null
+    private var fact: Fact? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param = it.getParcelable(FACTS_PARAM)
+            fact = it.getParcelable(FACTS_PARAM)
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        bindFactDetails(param)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        bindFactDetails(fact)
     }
 
     private fun bindFactDetails(fact: Fact?) {
