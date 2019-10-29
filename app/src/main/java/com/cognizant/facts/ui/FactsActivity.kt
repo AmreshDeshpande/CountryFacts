@@ -63,7 +63,7 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
     }
 
     override fun onBackPressed() {
-        if(supportFragmentManager.backStackEntryCount > 0){
+        if(supportFragmentManager.backStackEntryCount > 1){
             //Pop FactsDetails Fragment
             supportFragmentManager.popBackStackImmediate()
             setCurrentFragmentToHome()
@@ -73,7 +73,6 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
     }
 
     private fun setCurrentFragmentToHome(){
-       // mCurrentFragment = factsHomeFragment
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         supportActionBar?.title = title
     }

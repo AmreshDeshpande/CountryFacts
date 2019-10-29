@@ -1,20 +1,24 @@
 package com.cognizant.facts
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import com.cognizant.facts.data.model.Country
 import com.cognizant.facts.data.model.Fact
 
 class TestUtility {
 
     companion object {
 
-        fun getTestFactsRepoData(): List<Fact> {
-            return listOf(
-                Fact(
-                    "Beavers",
-                    "Beavers are second only to humans in their ability to manipulate and change their environment. They can measure up to 1.3 metres long. A group of beavers is called a colony",
-                    image = ("http://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/American_Beaver.jpg/220px-American_Beaver.jpg")
+        //Dummy Data for testing
+        fun getTestFactsRepoData(): Country{
+            return Country(
+                title = "About Canada",
+                factList = listOf(
+                    Fact(
+                        "Beavers",
+                        "Beavers are second only to humans in their ability to manipulate and change their environment. They can measure up to 1.3 metres long. A group of beavers is called a colony",
+                        image = ("http://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/American_Beaver.jpg/220px-American_Beaver.jpg")
+                    )
                 )
             )
         }
@@ -27,7 +31,6 @@ class TestObserver<T> : Observer<T> {
 
     override fun onChanged(value: T?) {
         observedValues.add(value)
-        Log.d("observedValues", observedValues.toString())
     }
 }
 

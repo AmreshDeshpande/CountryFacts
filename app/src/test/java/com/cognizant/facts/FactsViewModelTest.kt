@@ -5,7 +5,7 @@ import com.cognizant.facts.TestUtility.Companion.getTestFactsRepoData
 import com.cognizant.facts.api.ErrorResponse
 import com.cognizant.facts.data.DataState
 import com.cognizant.facts.data.FactsViewModel
-import com.cognizant.facts.data.model.Fact
+import com.cognizant.facts.data.model.Country
 import com.cognizant.facts.dataprovider.FactsDataRepository
 import com.cognizant.facts.utils.Constants
 import com.nhaarman.mockitokotlin2.any
@@ -38,33 +38,30 @@ class FactsViewModelTest {
 
     private val mainThreadSurrogate = newSingleThreadContext("UI thread")
     private var liveDataUnderTest: TestObserver<DataState>? = null
-
     private lateinit var factsViewModel: FactsViewModel
 
     @Before
     fun setUp() {
         Dispatchers.setMain(mainThreadSurrogate)
         factsViewModel = FactsViewModel(dataRepository)
-        liveDataUnderTest = factsViewModel.getCountryData()?.testObserver()
-
+        liveDataUnderTest = factsViewModel.getCountryDataState()?.testObserver()
     }
 
 
     @Test
     fun testViewModelLoading() {
-
         //Given
-        val liveDataUnderTest = factsViewModel.getCountryData()?.testObserver()
-        factsViewModel.getCountryData()
+        val liveDataUnderTest = factsViewModel.getCountryDataState()?.testObserver()
 
         //When
-        assertEquals(liveDataUnderTest?.observedValues?.size, 1)
+        factsViewModel.getCountry()
 
         //Then
-        val gitRepoDataLoading = liveDataUnderTest?.observedValues?.get(0) as DataState
-        assertTrue(gitRepoDataLoading == DataState.Loading)
-        assertFalse(gitRepoDataLoading is DataState.Success)
-        assertFalse(gitRepoDataLoading is DataState.Error)
+        assertEquals(liveDataUnderTest?.observedValues?.size, 1)
+        val dataState = liveDataUnderTest?.observedValues?.get(0) as DataState
+        assertTrue(dataState == DataState.Loading)
+        assertFalse(dataState is DataState.Success)
+        assertFalse(dataState is DataState.Error)
     }
 
     @Test
@@ -75,12 +72,12 @@ class FactsViewModelTest {
         // Will be launched in the mainThreadSurrogate dispatcher
         val testFactRepoData = getTestFactsRepoData()
         whenever(dataRepository.getFacts(any(), any())).thenAnswer {
-            (it.getArgument(0) as (List<Fact>?) -> (Unit)).invoke(getTestFactsRepoData())
+            (it.getArgument(0) as (Country?) -> (Unit)).invoke(getTestFactsRepoData())
             lock.countDown()
         }
 
         //When
-        factsViewModel.getCountryData()
+        factsViewModel.getCountry()
         lock.await()
         assertEquals(2, liveDataUnderTest?.observedValues?.size)
 
@@ -103,12 +100,11 @@ class FactsViewModelTest {
         }
 
         //When
-        factsViewModel.getCountryData()
+        factsViewModel.getCountry()
         lock.await()
 
         //Then
         assertEquals(liveDataUnderTest?.observedValues?.size, 2)
-        //Test success state
         val dataError = liveDataUnderTest?.observedValues?.get(1) as DataState
         assertTrue(dataError is DataState.Error)
         assertFalse(dataError is DataState.Success)
@@ -120,8 +116,11 @@ class FactsViewModelTest {
 
     @Test
     fun testViewModelInitialState() {
-        val liveData = factsViewModel.getCountryData()
+        //When
+        val liveData = factsViewModel.getCountryDataState()
         val data = liveData?.value
+
+        //Then
         assertFalse(data is DataState.Error)
         assertFalse(data is DataState.Success)
         assertFalse(data === DataState.Loading)

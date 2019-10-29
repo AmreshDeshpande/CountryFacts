@@ -3,6 +3,7 @@ package com.cognizant.facts
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.cognizant.facts.api.ErrorResponse
 import com.cognizant.facts.api.FactsApiService
+import com.cognizant.facts.data.model.Country
 import com.cognizant.facts.data.model.Fact
 import com.cognizant.facts.dataprovider.FactsApiDataProvider
 import com.cognizant.facts.dataprovider.FactsDataRepository
@@ -17,7 +18,7 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import retrofit2.Response
 
-class repositoryTest {
+class FactsDataRepositoryTest {
 
     @Rule
     @JvmField
@@ -35,7 +36,7 @@ class repositoryTest {
     lateinit var dataRepository: FactsDataRepository
 
     @Mock
-    lateinit var success: (List<Fact>?) -> (Unit)
+    lateinit var success: (Country?) -> (Unit)
 
     @Mock
     lateinit var error: (ErrorResponse) -> (Unit)

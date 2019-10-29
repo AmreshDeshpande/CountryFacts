@@ -13,7 +13,7 @@ class FactsViewModel(private val factsDataRepository :FactsDataRepository) : Vie
     private val factsDataState: MutableLiveData<DataState>? = MutableLiveData()
 
     //Exposing live data to view and not Mutable live status
-    fun getCountryData(): LiveData<DataState>? = factsDataState
+    fun getCountryDataState(): LiveData<DataState>? = factsDataState
 
     fun getCountry(){
         factsDataState?.value = DataState.Loading

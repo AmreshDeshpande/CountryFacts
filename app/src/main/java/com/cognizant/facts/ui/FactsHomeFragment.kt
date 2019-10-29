@@ -1,7 +1,6 @@
 package com.cognizant.facts.ui
 
 import android.content.Context
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,9 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.cognizant.facts.adapter.FactsAdapter
 import com.cognizant.facts.data.FactsViewModel
-import com.cognizant.facts.data.FactsViewModelFactory
 import com.cognizant.facts.data.model.Fact
-import com.cognizant.facts.dataprovider.FactsApiDataProvider
 import kotlinx.android.synthetic.main.facts_home_fragment.*
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.cognizant.facts.R
@@ -58,9 +55,6 @@ class FactsHomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-//        factsViewModel =  ViewModelProviders
-//            .of(this, FactsViewModelFactory(FactsApiDataProvider()))
-//            .get(FactsViewModel::class.java)
         //Data binding
         val binding: FactsHomeFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.facts_home_fragment,container,false)
         val view = binding.root
@@ -78,7 +72,7 @@ class FactsHomeFragment : Fragment() {
     }
 
     private fun fetchFacts() {
-        factsViewModel.getCountryData()?.observe(viewLifecycleOwner, Observer { factsDataStatus ->
+        factsViewModel.getCountryDataState()?.observe(viewLifecycleOwner, Observer { factsDataStatus ->
             when (factsDataStatus) {
 
                 is DataState.Success -> {

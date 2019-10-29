@@ -7,7 +7,7 @@ import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class Fact(
+data class Fact(
 
     @field:SerializedName("title")
     val title:String?,
