@@ -1,28 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-     xmlns:android="http://schemas.android.com/apk/res/android"
-     android:layout_width="match_parent"
-     android:layout_height="match_parent"
-     android:background="@color/white"
-     android:orientation="vertical"
-     android:clickable="true">
-
-    <ImageView
-        android:id="@+id/factDetailImage"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/tool_bar_height"
-        android:contentDescription="@string/facts_image"
-        android:scaleType="fitStart"
-        android:adjustViewBounds="true"/>
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/factDetailContent"
-        android:layout_marginLeft="@dimen/margin_10"
-        android:layout_marginRight="@dimen/margin_10"
-        android:layout_marginTop="@dimen/margin_20"
-        style="@style/FactDescription"/>
+        <ImageView
+            android:id="@+id/factDetailImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/tool_bar_height"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/facts_image"
+            android:scaleType="fitStart" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/factDetailContent"
+            style="@style/FactDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_20"
+            android:layout_marginRight="@dimen/margin_10"
+            android:paddingBottom="@dimen/margin_10"/>
+    </LinearLayout>
+</ScrollView>

@@ -19,9 +19,8 @@ class FactsViewModel(private val factsDataRepository :FactsDataRepository) : Vie
         factsDataState?.value = DataState.Loading
         viewModelScope.launch {
             factsDataRepository.getFacts(
-                success = { facts ->
-                    facts
-                    factsDataState?.value = DataState.Success(facts)
+                success = { countryData ->
+                    factsDataState?.value = DataState.Success(countryData)
                 },
                 failure = { error ->
                     factsDataState?.value = DataState.Error(error)

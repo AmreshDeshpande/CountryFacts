@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import com.cognizant.facts.R
 import com.cognizant.facts.data.model.Fact
 import com.squareup.picasso.Picasso
@@ -14,6 +15,7 @@ import kotlinx.android.synthetic.main.facts_detail_fragment.*
 const val FACTS_PARAM = "facts_param"
 
 class FactsDetailFragment: Fragment() {
+
     private var param: Fact? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +31,7 @@ class FactsDetailFragment: Fragment() {
     }
 
     private fun bindFactDetails(fact: Fact?) {
+        (activity as AppCompatActivity).supportActionBar?.title = fact?.title
         factDetailImage.let { imageView ->
             Picasso.with(activity)
                 .load(fact?.image)

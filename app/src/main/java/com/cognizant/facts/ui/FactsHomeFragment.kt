@@ -23,6 +23,10 @@ import com.cognizant.facts.utils.mapItemType
 import com.cognizant.facts.utils.showSnackBar
 import kotlinx.android.synthetic.main.no_connection.*
 import javax.inject.Inject
+import androidx.appcompat.app.AppCompatActivity
+
+
+
 
 class FactsHomeFragment : Fragment() {
 
@@ -65,10 +69,10 @@ class FactsHomeFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        fetchFacts()
         setupRecyclerView()
         setUpSwipeToRefresh()
         setUpNetworkListener()
+        fetchFacts()
     }
 
     private fun fetchFacts() {
@@ -77,6 +81,7 @@ class FactsHomeFragment : Fragment() {
 
                 is DataState.Success -> {
                     mListener?.setActionBarTitle(factsDataStatus.countryData?.title?:"")
+                    (activity as AppCompatActivity).supportActionBar?.title =factsDataStatus.countryData?.title?:""
                     factsAdapter.factList = factsDataStatus.countryData?.factList?.mapItemType()
                     factsAdapter.notifyDataSetChanged()
                     swipeRefresh.isRefreshing = false

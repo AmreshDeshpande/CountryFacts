@@ -2,7 +2,6 @@ package com.cognizant.facts.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import com.cognizant.facts.R
 import com.cognizant.facts.data.model.Fact
 import kotlinx.android.synthetic.main.facts_activity.*
@@ -18,7 +17,7 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
 
     private lateinit var factsDetailFragment: FactsDetailFragment
 
-    private var title :String? = null
+    private var homeTitle :String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +31,12 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
                 .replace(R.id.container, factsHomeFragment)
                 .addToBackStack(null)
                 .commit()
+        }else{
+            val title = savedInstanceState.getString("title")
+            setActionBarTitle(title)
+            if(supportFragmentManager.backStackEntryCount > 1){
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            }
         }
     }
 
@@ -44,6 +49,7 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
                 factsDetailFragment.apply {
                     arguments = Bundle().apply {
                         putParcelable(FACTS_PARAM, fragmentDetailsPair.second)
+                        //title = fragmentDetailsPair.second?.title
                         supportActionBar?.title = fragmentDetailsPair.second?.title
                     }
                 }
@@ -58,8 +64,8 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
     }
 
     override fun setActionBarTitle(title: String) {
+        homeTitle = title
         supportActionBar?.title = title
-        this.title = title
     }
 
     override fun onBackPressed() {
@@ -74,6 +80,11 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
 
     private fun setCurrentFragmentToHome(){
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        supportActionBar?.title = title
+        supportActionBar?.title = homeTitle
+    }
+
+    public override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        super.onSaveInstanceState(savedInstanceState)
+        savedInstanceState.putString("title", homeTitle)
     }
 }
