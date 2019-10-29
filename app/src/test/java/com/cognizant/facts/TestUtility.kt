@@ -2,8 +2,8 @@ package com.cognizant.facts
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import com.cognizant.facts.data.model.Country
-import com.cognizant.facts.data.model.Fact
+import com.cognizant.facts.feature.data.model.Country
+import com.cognizant.facts.feature.data.model.Fact
 
 class TestUtility {
 

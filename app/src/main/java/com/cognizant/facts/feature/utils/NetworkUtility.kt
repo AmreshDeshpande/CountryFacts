@@ -1,4 +1,4 @@
-package com.cognizant.facts.utils
+package com.cognizant.facts.feature.utils
 
 import android.app.Application
 

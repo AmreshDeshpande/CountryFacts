@@ -7,14 +7,14 @@
 
         <variable
             name="factsViewModel"
-            type="com.cognizant.facts.data.FactsViewModel" />
+            type="com.cognizant.facts.feature.FactsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/homeFragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.FactsHomeFragment">
+        tools:context=".feature.ui.FactsHomeFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

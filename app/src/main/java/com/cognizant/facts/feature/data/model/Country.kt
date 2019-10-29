@@ -1,4 +1,4 @@
-package com.cognizant.facts.data.model
+package com.cognizant.facts.feature.data.model
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
@@ -8,9 +8,9 @@ import kotlinx.android.parcel.Parcelize
 data class Country(
 
     @field:SerializedName("title")
-      val title : String,
+    val title: String,
 
     @field:SerializedName("rows")
-    val factList : List<Fact>
+    val factList: List<Fact>
 
-): Parcelable
+) : Parcelable

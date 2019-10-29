@@ -1,9 +1,9 @@
-package com.cognizant.facts.ui
+package com.cognizant.facts.feature.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.cognizant.facts.R
-import com.cognizant.facts.data.model.Fact
+import com.cognizant.facts.feature.data.model.Fact
 import kotlinx.android.synthetic.main.facts_activity.*
 
 // Currently there is only one Fragment to navigate in App. In Future can have additional Fragments
@@ -17,7 +17,8 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
 
     private lateinit var factsDetailFragment: FactsDetailFragment
 
-    private var homeTitle :String? = null
+    private var homeTitle: String? = null
+    private var detailsTitle: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,11 +32,14 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
                 .replace(R.id.container, factsHomeFragment)
                 .addToBackStack(null)
                 .commit()
-        }else{
-            val title = savedInstanceState.getString("title")
-            setActionBarTitle(title)
-            if(supportFragmentManager.backStackEntryCount > 1){
+        } else {
+            homeTitle = savedInstanceState.getString("title")
+            detailsTitle = savedInstanceState.getString("detailsTitle")
+            if (supportFragmentManager.backStackEntryCount > 1) {
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                setActionBarTitle(detailsTitle ?: "")
+            } else {
+                setActionBarTitle(title = homeTitle ?: "")
             }
         }
     }
@@ -49,7 +53,7 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
                 factsDetailFragment.apply {
                     arguments = Bundle().apply {
                         putParcelable(FACTS_PARAM, fragmentDetailsPair.second)
-                        //title = fragmentDetailsPair.second?.title
+                        detailsTitle = fragmentDetailsPair.second?.title
                         supportActionBar?.title = fragmentDetailsPair.second?.title
                     }
                 }
@@ -69,16 +73,16 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
     }
 
     override fun onBackPressed() {
-        if(supportFragmentManager.backStackEntryCount > 1){
+        if (supportFragmentManager.backStackEntryCount > 1) {
             //Pop FactsDetails Fragment
             supportFragmentManager.popBackStackImmediate()
             setCurrentFragmentToHome()
-        }else{
+        } else {
             finish()
         }
     }
 
-    private fun setCurrentFragmentToHome(){
+    private fun setCurrentFragmentToHome() {
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         supportActionBar?.title = homeTitle
     }
@@ -86,5 +90,6 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
     public override fun onSaveInstanceState(savedInstanceState: Bundle) {
         super.onSaveInstanceState(savedInstanceState)
         savedInstanceState.putString("title", homeTitle)
+        savedInstanceState.putString("detailsTitle", detailsTitle)
     }
 }

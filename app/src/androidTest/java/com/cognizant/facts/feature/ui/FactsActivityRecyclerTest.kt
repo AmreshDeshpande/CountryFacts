@@ -1,4 +1,4 @@
-package com.cognizant.facts.ui
+package com.cognizant.facts.feature.ui
 
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +25,7 @@ import org.hamcrest.Matchers
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import com.cognizant.facts.data.DataState
+import com.cognizant.facts.feature.data.DataState
 import org.hamcrest.CoreMatchers.allOf
 
 class FactsActivityRecyclerTest {

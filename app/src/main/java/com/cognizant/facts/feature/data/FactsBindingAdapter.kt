@@ -1,4 +1,4 @@
-package com.cognizant.facts.data
+package com.cognizant.facts.feature.data
 
 import androidx.databinding.BindingAdapter
 import android.view.View
@@ -7,7 +7,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 
 @BindingAdapter(value = ["dataState", "swipeToRefresh"], requireAll = false)
-fun setStateForLoading(progressBar: ProgressBar, dataState: DataState, swipeRefreshLayout: SwipeRefreshLayout) {
+fun setStateForLoading(
+    progressBar: ProgressBar,
+    dataState: DataState,
+    swipeRefreshLayout: SwipeRefreshLayout
+) {
 
     progressBar.visibility = when (dataState) {
 
@@ -17,7 +21,7 @@ fun setStateForLoading(progressBar: ProgressBar, dataState: DataState, swipeRefr
             } else
                 View.GONE
         }
-        is DataState.Success, is DataState.Error ->{
+        is DataState.Success, is DataState.Error -> {
             View.GONE
         }
     }

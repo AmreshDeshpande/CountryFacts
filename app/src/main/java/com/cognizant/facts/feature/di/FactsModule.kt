@@ -1,14 +1,14 @@
-package com.cognizant.facts.di
+package com.cognizant.facts.feature.di
 
 import androidx.lifecycle.ViewModelProviders
-import com.cognizant.facts.adapter.FactsAdapter
-import com.cognizant.facts.api.FactsApiService
-import com.cognizant.facts.data.FactsViewModel
-import com.cognizant.facts.data.FactsViewModelFactory
-import com.cognizant.facts.dataprovider.FactsApiDataProvider
-import com.cognizant.facts.dataprovider.FactsDataRepository
-import com.cognizant.facts.ui.FactsHomeFragment
-import com.cognizant.facts.utils.Constants
+import com.cognizant.facts.feature.ui.FactsAdapter
+import com.cognizant.facts.feature.data.api.FactsApiService
+import com.cognizant.facts.feature.FactsViewModel
+import com.cognizant.facts.feature.FactsViewModelFactory
+import com.cognizant.facts.feature.dataprovider.FactsRepositoryImpl
+import com.cognizant.facts.feature.dataprovider.FactsRepository
+import com.cognizant.facts.feature.ui.FactsHomeFragment
+import com.cognizant.facts.feature.utils.Constants
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -16,11 +16,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 @Module
-class FactsModule(private val factsHomeFragment: FactsHomeFragment)
-{
+class FactsModule(private val factsHomeFragment: FactsHomeFragment) {
     @Provides
-    fun providesRepository(factsApiService: FactsApiService): FactsDataRepository {
-        return FactsApiDataProvider(factsApiService)
+    fun providesRepository(factsApiService: FactsApiService): FactsRepository {
+        return FactsRepositoryImpl(factsApiService)
     }
 
     @Provides
@@ -31,8 +30,8 @@ class FactsModule(private val factsHomeFragment: FactsHomeFragment)
     }
 
     @Provides
-    fun providesFactsViewModelFactory(factsDataRepository: FactsDataRepository): FactsViewModelFactory {
-        return FactsViewModelFactory(factsDataRepository)
+    fun providesFactsViewModelFactory(factsRepository: FactsRepository): FactsViewModelFactory {
+        return FactsViewModelFactory(factsRepository)
     }
 
     @Provides

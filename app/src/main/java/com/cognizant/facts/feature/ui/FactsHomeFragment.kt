@@ -1,4 +1,4 @@
-package com.cognizant.facts.ui
+package com.cognizant.facts.feature.ui
 
 import android.content.Context
 import android.os.Bundle
@@ -8,24 +8,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import com.cognizant.facts.adapter.FactsAdapter
-import com.cognizant.facts.data.FactsViewModel
-import com.cognizant.facts.data.model.Fact
+import com.cognizant.facts.feature.FactsViewModel
+import com.cognizant.facts.feature.data.model.Fact
 import kotlinx.android.synthetic.main.facts_home_fragment.*
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.cognizant.facts.R
-import com.cognizant.facts.data.DataState
+import com.cognizant.facts.feature.data.DataState
 import com.cognizant.facts.databinding.FactsHomeFragmentBinding
-import com.cognizant.facts.di.DaggerFactsComponent
-import com.cognizant.facts.di.FactsModule
-import com.cognizant.facts.utils.NetworkUtility
-import com.cognizant.facts.utils.mapItemType
-import com.cognizant.facts.utils.showSnackBar
+import com.cognizant.facts.feature.di.FactsModule
+import com.cognizant.facts.feature.utils.NetworkUtility
+import com.cognizant.facts.feature.utils.mapItemType
+import com.cognizant.facts.feature.utils.showSnackBar
 import kotlinx.android.synthetic.main.no_connection.*
 import javax.inject.Inject
 import androidx.appcompat.app.AppCompatActivity
-
-
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.cognizant.facts.feature.di.DaggerFactsComponent
 
 
 class FactsHomeFragment : Fragment() {
@@ -34,14 +31,14 @@ class FactsHomeFragment : Fragment() {
     lateinit var factsViewModel: FactsViewModel
 
     @Inject
-     lateinit var factsAdapter :FactsAdapter
+    lateinit var factsAdapter: FactsAdapter
 
     // This is the instance of our parent activity's interface to update from fragment
     private var mListener: OnFragmentInteractionListener? = null
 
 
     //Handle list item click
-     var itemClick: (Fact?) -> (Unit) = { fact ->
+    var itemClick: (Fact?) -> (Unit) = { fact ->
         mListener?.onNavigation(Pair(FragmentName.FactsDetails, fact))
     }
 
@@ -60,15 +57,16 @@ class FactsHomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         //Data binding
-        val binding: FactsHomeFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.facts_home_fragment,container,false)
+        val binding: FactsHomeFragmentBinding =
+            DataBindingUtil.inflate(inflater, R.layout.facts_home_fragment, container, false)
         val view = binding.root
         binding.factsViewModel = factsViewModel
         binding.lifecycleOwner = activity
         return view
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         setUpSwipeToRefresh()
         setUpNetworkListener()
@@ -76,31 +74,32 @@ class FactsHomeFragment : Fragment() {
     }
 
     private fun fetchFacts() {
-        factsViewModel.getCountryDataState()?.observe(viewLifecycleOwner, Observer { factsDataStatus ->
-            when (factsDataStatus) {
+        factsViewModel.getCountryDataState()
+            ?.observe(viewLifecycleOwner, Observer { factsDataStatus ->
+                when (factsDataStatus) {
 
-                is DataState.Success -> {
-                    mListener?.setActionBarTitle(factsDataStatus.countryData?.title?:"")
-                    (activity as AppCompatActivity).supportActionBar?.title =factsDataStatus.countryData?.title?:""
-                    factsAdapter.factList = factsDataStatus.countryData?.factList?.mapItemType()
-                    factsAdapter.notifyDataSetChanged()
-                    swipeRefresh.isRefreshing = false
+                    is DataState.Success -> {
+                        mListener?.setActionBarTitle(factsDataStatus.countryData?.title ?: "")
+                        (activity as AppCompatActivity).supportActionBar?.title =
+                            factsDataStatus.countryData?.title ?: ""
+                        factsAdapter.factList = factsDataStatus.countryData?.factList?.mapItemType()
+                        factsAdapter.notifyDataSetChanged()
+                        swipeRefresh.isRefreshing = false
+                    }
+                    is DataState.Error -> {
+                        homeFragmentContainer.showSnackBar(factsDataStatus.error.errorMessage)
+                    }
                 }
-                is DataState.Error -> {
-                    homeFragmentContainer.showSnackBar(factsDataStatus.error.errorMessage)
-                }
-            }
-        })
+            })
         factsViewModel.getCountry()
     }
 
     private fun setupRecyclerView() {
-        val linearLayoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
-
+        val linearLayoutManager = LinearLayoutManager(activity)
         recyclerView.apply {
-           layoutManager = linearLayoutManager
+            layoutManager = linearLayoutManager
             factsAdapter = FactsAdapter(itemClick)
-            adapter =  factsAdapter
+            adapter = factsAdapter
         }
     }
 
@@ -119,6 +118,7 @@ class FactsHomeFragment : Fragment() {
             throw RuntimeException(context!!.toString() + " must implement OnFragmentInteractionListener")
         }
     }
+
     override fun onDetach() {
         super.onDetach()
         mListener = null
@@ -128,26 +128,19 @@ class FactsHomeFragment : Fragment() {
      * Define the methods to update parent Activity.
      */
     interface OnFragmentInteractionListener {
-        fun onNavigation(fragmentDetailsPair : Pair<FragmentName, Fact?>)
+        fun onNavigation(fragmentDetailsPair: Pair<FragmentName, Fact?>)
 
         fun setActionBarTitle(title: String)
     }
 
     private fun setUpNetworkListener() {
-
         NetworkUtility.registerNetworkCallback()
         NetworkUtility.observe(this, Observer { connection ->
-            connection?.let {
-                if (!connection) {
-                    recyclerView.visibility = View.GONE
-                    noConnectionLayout.visibility = View.VISIBLE
-                } else {
-                    recyclerView.visibility = View.VISIBLE
-                    noConnectionLayout.visibility = View.GONE
-                }
+            connection?.let { isNetwork ->
+                recyclerView.visibility = if (isNetwork) View.VISIBLE else View.GONE
+                noConnectionLayout.visibility = if (isNetwork) View.GONE else View.VISIBLE
             }
         })
-
         tryAgainBtn.setOnClickListener {
             factsViewModel.getCountry()
         }

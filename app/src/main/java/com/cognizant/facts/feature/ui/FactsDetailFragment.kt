@@ -1,4 +1,4 @@
-package com.cognizant.facts.ui
+package com.cognizant.facts.feature.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,13 +8,13 @@ import android.view.ViewGroup
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.cognizant.facts.R
-import com.cognizant.facts.data.model.Fact
+import com.cognizant.facts.feature.data.model.Fact
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.facts_detail_fragment.*
 
 const val FACTS_PARAM = "facts_param"
 
-class FactsDetailFragment: Fragment() {
+class FactsDetailFragment : Fragment() {
 
     private var param: Fact? = null
 
@@ -49,7 +49,7 @@ class FactsDetailFragment: Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId){
+        when (item.itemId) {
             android.R.id.home -> {
                 activity?.onBackPressed()
                 return true

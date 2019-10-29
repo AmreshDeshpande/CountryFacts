@@ -1,12 +1,12 @@
 package com.cognizant.facts
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.cognizant.facts.api.ErrorResponse
-import com.cognizant.facts.api.FactsApiService
-import com.cognizant.facts.data.model.Country
-import com.cognizant.facts.data.model.Fact
-import com.cognizant.facts.dataprovider.FactsApiDataProvider
-import com.cognizant.facts.dataprovider.FactsDataRepository
+import com.cognizant.facts.feature.data.api.ErrorResponse
+import com.cognizant.facts.feature.data.api.FactsApiService
+import com.cognizant.facts.feature.data.model.Country
+import com.cognizant.facts.feature.data.model.Fact
+import com.cognizant.facts.feature.dataprovider.FactsRepositoryImpl
+import com.cognizant.facts.feature.dataprovider.FactsRepository
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -18,7 +18,7 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import retrofit2.Response
 
-class FactsDataRepositoryTest {
+class FactsRepositoryTest {
 
     @Rule
     @JvmField
@@ -33,7 +33,7 @@ class FactsDataRepositoryTest {
     @Mock
     lateinit var response: Response<List<Fact>?>
 
-    lateinit var dataRepository: FactsDataRepository
+    lateinit var repository: FactsRepository
 
     @Mock
     lateinit var success: (Country?) -> (Unit)
@@ -44,7 +44,7 @@ class FactsDataRepositoryTest {
     @Before
     fun setUp() {
         //Given
-        dataRepository = FactsApiDataProvider(factsApiService)
+        repository = FactsRepositoryImpl(factsApiService)
     }
 
     @Test
@@ -57,7 +57,7 @@ class FactsDataRepositoryTest {
         }
 
         //When
-        dataRepository.getFacts(success, error)
+        repository.getFacts(success, error)
 
         //Then
         verify(success)(any())
@@ -74,7 +74,7 @@ class FactsDataRepositoryTest {
         }
 
         //When
-        dataRepository.getFacts(success, error)
+        repository.getFacts(success, error)
 
         //Then
         verify(error)(any())

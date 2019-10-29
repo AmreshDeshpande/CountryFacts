@@ -1,6 +1,6 @@
-package com.cognizant.facts.api
+package com.cognizant.facts.feature.data.api
 
-import com.cognizant.facts.utils.Constants.Companion.ERROR_MESSAGE
+import com.cognizant.facts.feature.utils.Constants.Companion.ERROR_MESSAGE
 import com.google.gson.JsonParser
 import retrofit2.HttpException
 

@@ -2,12 +2,12 @@ package com.cognizant.facts
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.cognizant.facts.TestUtility.Companion.getTestFactsRepoData
-import com.cognizant.facts.api.ErrorResponse
-import com.cognizant.facts.data.DataState
-import com.cognizant.facts.data.FactsViewModel
-import com.cognizant.facts.data.model.Country
-import com.cognizant.facts.dataprovider.FactsDataRepository
-import com.cognizant.facts.utils.Constants
+import com.cognizant.facts.feature.data.api.ErrorResponse
+import com.cognizant.facts.feature.data.DataState
+import com.cognizant.facts.feature.FactsViewModel
+import com.cognizant.facts.feature.data.model.Country
+import com.cognizant.facts.feature.dataprovider.FactsRepository
+import com.cognizant.facts.feature.utils.Constants
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.*
@@ -31,7 +31,7 @@ class FactsViewModelTest {
     var mockitoRule = MockitoJUnit.rule()
 
     @Mock
-    lateinit var dataRepository: FactsDataRepository
+    lateinit var repository: FactsRepository
 
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
@@ -43,7 +43,7 @@ class FactsViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(mainThreadSurrogate)
-        factsViewModel = FactsViewModel(dataRepository)
+        factsViewModel = FactsViewModel(repository)
         liveDataUnderTest = factsViewModel.getCountryDataState()?.testObserver()
     }
 
@@ -71,7 +71,7 @@ class FactsViewModelTest {
         //Given
         // Will be launched in the mainThreadSurrogate dispatcher
         val testFactRepoData = getTestFactsRepoData()
-        whenever(dataRepository.getFacts(any(), any())).thenAnswer {
+        whenever(repository.getFacts(any(), any())).thenAnswer {
             (it.getArgument(0) as (Country?) -> (Unit)).invoke(getTestFactsRepoData())
             lock.countDown()
         }
@@ -94,7 +94,7 @@ class FactsViewModelTest {
     fun testViewModelError() = runBlockingTest {
         val lock = CountDownLatch(1)
         //Given
-        whenever(dataRepository.getFacts(any(), any())).thenAnswer {
+        whenever(repository.getFacts(any(), any())).thenAnswer {
             (it.getArgument(1) as (ErrorResponse) -> (Unit)).invoke((ErrorResponse(Throwable())))
             lock.countDown()
         }
