@@ -16,7 +16,7 @@ class FactsViewModel(private val factsRepository: FactsRepository) : ViewModel()
     //Exposing live data to view and not Mutable live status
     fun getCountryDataState(): LiveData<DataState>? = factsDataState
 
-    fun getCountry() {
+    fun getCountryFacts() {
         factsDataState?.value = DataState.Loading
         viewModelScope.launch {
             factsRepository.getFacts(

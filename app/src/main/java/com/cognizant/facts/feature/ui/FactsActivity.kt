@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.cognizant.facts.R
 import com.cognizant.facts.feature.data.model.Fact
+import com.cognizant.facts.feature.utils.isHomeFragment
 import kotlinx.android.synthetic.main.facts_activity.*
 
 class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteractionListener {
@@ -12,7 +13,7 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
 
     private lateinit var factsDetailFragment: FactsDetailFragment
 
-    private var homeTitle: String? = null
+    private var toolbarHomeTitle: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,11 +28,11 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
                 .addToBackStack(null)
                 .commit()
         } else {
-            homeTitle = savedInstanceState.getString("title")
-            if (supportFragmentManager.backStackEntryCount > 1) {
-                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            toolbarHomeTitle = savedInstanceState.getString("title")
+            if (isHomeFragment()) {
+                setToolBarHomeTitle(title = toolbarHomeTitle ?: "")
             } else {
-                setToolBarHomeTitle(title = homeTitle ?: "")
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
             }
         }
     }
@@ -51,27 +52,27 @@ class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteracti
     }
 
     override fun setToolBarHomeTitle(title: String) {
-        homeTitle = title
+        toolbarHomeTitle = title
         supportActionBar?.title = title
     }
 
     override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount > 1) {
+        if (isHomeFragment()) {
+            finish()
+        } else {
             //Pop FactsDetails Fragment
             supportFragmentManager.popBackStackImmediate()
             setCurrentFragmentToHome()
-        } else {
-            finish()
         }
     }
 
     private fun setCurrentFragmentToHome() {
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        supportActionBar?.title = homeTitle
+        supportActionBar?.title = toolbarHomeTitle
     }
 
     public override fun onSaveInstanceState(savedInstanceState: Bundle) {
         super.onSaveInstanceState(savedInstanceState)
-        savedInstanceState.putString("title", homeTitle)
+        savedInstanceState.putString("title", toolbarHomeTitle)
     }
 }

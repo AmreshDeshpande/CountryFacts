@@ -5,7 +5,6 @@ import com.google.gson.JsonParser
 import retrofit2.HttpException
 
 class ErrorResponse constructor(throwable: Throwable) {
-
     var errorMessage: String
 
     init {

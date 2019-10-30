@@ -21,6 +21,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
+import org.mockito.junit.MockitoRule
 import java.util.concurrent.CountDownLatch
 
 
@@ -28,7 +29,7 @@ class FactsViewModelTest {
 
     @Rule
     @JvmField
-    var mockitoRule = MockitoJUnit.rule()
+    var mockitoRule: MockitoRule = MockitoJUnit.rule()
 
     @Mock
     lateinit var repository: FactsRepository
@@ -54,7 +55,7 @@ class FactsViewModelTest {
         val liveDataUnderTest = factsViewModel.getCountryDataState()?.testObserver()
 
         //When
-        factsViewModel.getCountry()
+        factsViewModel.getCountryFacts()
 
         //Then
         assertEquals(liveDataUnderTest?.observedValues?.size, 1)
@@ -77,7 +78,7 @@ class FactsViewModelTest {
         }
 
         //When
-        factsViewModel.getCountry()
+        factsViewModel.getCountryFacts()
         lock.await()
         assertEquals(2, liveDataUnderTest?.observedValues?.size)
 
@@ -100,7 +101,7 @@ class FactsViewModelTest {
         }
 
         //When
-        factsViewModel.getCountry()
+        factsViewModel.getCountryFacts()
         lock.await()
 
         //Then

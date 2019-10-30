@@ -16,13 +16,14 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
+import org.mockito.junit.MockitoRule
 import retrofit2.Response
 
 class FactsRepositoryTest {
 
     @Rule
     @JvmField
-    var mockitoRule = MockitoJUnit.rule()
+    var mockitoRule: MockitoRule = MockitoJUnit.rule()
 
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
@@ -33,7 +34,7 @@ class FactsRepositoryTest {
     @Mock
     lateinit var response: Response<List<Fact>?>
 
-    lateinit var repository: FactsRepository
+    private lateinit var repository: FactsRepository
 
     @Mock
     lateinit var success: (Country?) -> (Unit)
@@ -55,10 +56,8 @@ class FactsRepositoryTest {
         whenever(factsApiService.getFacts()).thenAnswer {
             response
         }
-
         //When
         repository.getFacts(success, error)
-
         //Then
         verify(success)(any())
     }
@@ -72,10 +71,8 @@ class FactsRepositoryTest {
         whenever(factsApiService.getFacts()).thenAnswer {
             response
         }
-
         //When
         repository.getFacts(success, error)
-
         //Then
         verify(error)(any())
     }

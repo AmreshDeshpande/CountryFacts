@@ -8,7 +8,6 @@ import com.cognizant.facts.feature.data.model.Fact
 class TestUtility {
 
     companion object {
-
         //Dummy Data for testing
         fun getTestFactsRepoData(): Country{
             return Country(
@@ -26,9 +25,7 @@ class TestUtility {
 }
 
 class TestObserver<T> : Observer<T> {
-
     val observedValues = mutableListOf<T?>()
-
     override fun onChanged(value: T?) {
         observedValues.add(value)
     }

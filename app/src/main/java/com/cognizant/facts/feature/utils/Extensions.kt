@@ -1,5 +1,6 @@
 package com.cognizant.facts.feature.utils
 
+import androidx.appcompat.app.AppCompatActivity
 import com.cognizant.facts.feature.ui.FactsAdapter.Companion.FactItemWithNoDescription
 import com.cognizant.facts.feature.ui.FactsAdapter.Companion.FactItemWithNoImage
 import com.cognizant.facts.feature.data.model.Fact
@@ -23,4 +24,9 @@ fun List<Fact>.mapItemType(): List<Fact> {
     }
     return list
 }
+
+fun AppCompatActivity.isHomeFragment(): Boolean{
+    return supportFragmentManager.backStackEntryCount == 1
+}
+
 

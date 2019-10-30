@@ -43,19 +43,20 @@ class FactsActivityRecyclerTest {
 
     @Before
     @UiThreadTest
-    fun setUp(){
+    fun setUp() {
         val factsHomeFragment: FactsHomeFragment =
             mActivityTestRule.activity.supportFragmentManager.fragments[0] as FactsHomeFragment
-        factsHomeFragment.factsViewModel.getCountryDataState()?.observe(mActivityTestRule.activity, Observer {
-            when (it) {
-                is DataState.Success -> {
-                    EspressoIdlingResource.decrement()
+        factsHomeFragment.factsViewModel.getCountryDataState()
+            ?.observe(mActivityTestRule.activity, Observer {
+                when (it) {
+                    is DataState.Success -> {
+                        EspressoIdlingResource.decrement()
+                    }
+                    is DataState.Error -> {
+                        EspressoIdlingResource.decrement()
+                    }
                 }
-                is DataState.Error -> {
-                    EspressoIdlingResource.decrement()
-                }
-            }
-        })
+            })
     }
 
     @Test
@@ -71,7 +72,6 @@ class FactsActivityRecyclerTest {
     @Test
     fun testCaseForRecyclerItemView() {
         onView(withText("About Canada")).check(matches(isDisplayed()))
-
         //Check title
         val textView = onView(
             allOf(

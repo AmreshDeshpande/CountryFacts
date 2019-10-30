@@ -1,7 +1,6 @@
 package com.cognizant.facts.feature.utils
 
 import android.app.Application
-
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
@@ -10,6 +9,9 @@ import android.net.NetworkRequest
 import android.os.Build
 import androidx.lifecycle.LiveData
 
+/**
+ * Utility class to check network connection and update
+ */
 object NetworkUtility : LiveData<Boolean>() {
 
     private lateinit var application: Application

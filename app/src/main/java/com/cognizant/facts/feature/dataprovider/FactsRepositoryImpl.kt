@@ -29,7 +29,7 @@ class FactsRepositoryImpl(private val factsApiService: FactsApiService) : FactsR
                 failure.invoke(ErrorResponse(exception))
             }
         } catch (exception: Exception) {
-            exception.printStackTrace()
+            failure.invoke(ErrorResponse(exception))
         }
     }
 

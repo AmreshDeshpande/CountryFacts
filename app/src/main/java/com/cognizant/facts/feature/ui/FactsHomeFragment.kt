@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.cognizant.facts.feature.FactsViewModel
@@ -20,10 +21,9 @@ import com.cognizant.facts.feature.utils.mapItemType
 import com.cognizant.facts.feature.utils.showSnackBar
 import kotlinx.android.synthetic.main.no_connection.*
 import javax.inject.Inject
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cognizant.facts.feature.di.DaggerFactsComponent
-
+import com.cognizant.facts.feature.utils.isHomeFragment
 
 class FactsHomeFragment : Fragment() {
 
@@ -73,29 +73,28 @@ class FactsHomeFragment : Fragment() {
     }
 
     private fun fetchFacts() {
-            factsViewModel.getCountryDataState()
-                ?.observe(viewLifecycleOwner, Observer { factsDataStatus ->
-                    when (factsDataStatus) {
+        factsViewModel.getCountryDataState()
+            ?.observe(viewLifecycleOwner, Observer { factsDataStatus ->
+                when (factsDataStatus) {
 
-                        is DataState.Success -> {
-                            if (fragmentManager?.backStackEntryCount == 1) {
-                                mListener?.setToolBarHomeTitle(
-                                    factsDataStatus.countryData?.title ?: ""
-                                )
-                            }
-
-                            factsAdapter.factList =
-                                factsDataStatus.countryData?.factList?.mapItemType()
-                            factsAdapter.notifyDataSetChanged()
-                            swipeRefresh.isRefreshing = false
+                    is DataState.Success -> {
+                        if ((activity as AppCompatActivity).isHomeFragment()) {
+                            mListener?.setToolBarHomeTitle(
+                                factsDataStatus.countryData?.title ?: ""
+                            )
                         }
-                        is DataState.Error -> {
-                            homeFragmentContainer.showSnackBar(factsDataStatus.error.errorMessage)
-                        }
+                        factsAdapter.factList =
+                            factsDataStatus.countryData?.factList?.mapItemType()
+                        factsAdapter.notifyDataSetChanged()
+                        swipeRefresh.isRefreshing = false
                     }
-                })
-            factsViewModel.getCountry()
 
+                    is DataState.Error -> {
+                        homeFragmentContainer.showSnackBar(factsDataStatus.error.errorMessage)
+                    }
+                }
+            })
+        factsViewModel.getCountryFacts()
     }
 
     private fun setupRecyclerView() {
@@ -140,13 +139,14 @@ class FactsHomeFragment : Fragment() {
     private fun setUpNetworkListener() {
         NetworkUtility.registerNetworkCallback()
         NetworkUtility.observe(this, Observer { connection ->
-            connection?.let { isNetwork ->
-                recyclerView.visibility = if (isNetwork) View.VISIBLE else View.GONE
-                noConnectionLayout.visibility = if (isNetwork) View.GONE else View.VISIBLE
+            connection?.let { networkAvailable ->
+                if(networkAvailable) factsViewModel.getCountryFacts()
+                recyclerView.visibility = if (networkAvailable) View.VISIBLE else View.GONE
+                noConnectionLayout.visibility = if (networkAvailable) View.GONE else View.VISIBLE
             }
         })
         tryAgainBtn.setOnClickListener {
-            factsViewModel.getCountry()
+            factsViewModel.getCountryFacts()
         }
     }
 

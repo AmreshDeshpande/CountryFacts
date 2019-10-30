@@ -89,16 +89,13 @@ class FactsAdapter(private val itemClick: (Fact?) -> (Unit)) :
         BaseViewHolder<Fact?>(newItemView) {
         override fun bind(fact: Fact?, itemClick: (Fact?) -> Unit) {
             itemView.apply {
-
                 title.text = fact?.title
-
                 fact?.image?.let { url ->
                     Picasso.with(context)
                         .load(url)
-                       // .error(R.drawable.place_holder)
+                         .error(R.drawable.place_holder)
                         .into(factImage)
                 }
-
                 setOnClickListener {
                     itemClick.invoke(fact)
                 }
@@ -111,10 +108,8 @@ class FactsAdapter(private val itemClick: (Fact?) -> (Unit)) :
         BaseViewHolder<Fact?>(newItemView) {
         override fun bind(fact: Fact?, itemClick: (Fact?) -> Unit) {
             itemView.apply {
-
                 title.text = fact?.title
                 description.text = fact?.description
-
                 setOnClickListener {
                     itemClick.invoke(fact)
                 }
