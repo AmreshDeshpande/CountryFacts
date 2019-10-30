@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.cognizant.facts.dataprovider.FactsRepository
+import com.cognizant.facts.data.FactsRepository
 import androidx.lifecycle.viewModelScope
 import com.cognizant.facts.data.DataState
 import kotlinx.coroutines.launch

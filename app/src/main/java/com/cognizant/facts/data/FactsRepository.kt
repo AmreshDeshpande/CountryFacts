@@ -1,4 +1,4 @@
-package com.cognizant.facts.dataprovider
+package com.cognizant.facts.data
 
 import com.cognizant.facts.data.api.ErrorResponse
 import com.cognizant.facts.data.model.Country

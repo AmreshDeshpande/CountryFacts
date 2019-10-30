@@ -1,4 +1,4 @@
-package com.cognizant.facts.feature.ui
+package com.cognizant.facts
 
 import android.view.View
 import android.view.ViewGroup
@@ -7,7 +7,6 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.rule.ActivityTestRule
-import com.cognizant.facts.EspressoIdlingResource
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
@@ -17,7 +16,6 @@ import org.junit.Rule
 import org.junit.Test
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.RootMatchers
-import com.cognizant.facts.R
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.annotation.UiThreadTest
 import kotlinx.android.synthetic.main.facts_home_fragment.*

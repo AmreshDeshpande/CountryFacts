@@ -5,7 +5,7 @@ import com.cognizant.facts.TestUtility.Companion.getTestFactsRepoData
 import com.cognizant.facts.data.api.ErrorResponse
 import com.cognizant.facts.data.DataState
 import com.cognizant.facts.data.model.Country
-import com.cognizant.facts.dataprovider.FactsRepository
+import com.cognizant.facts.data.FactsRepository
 import com.cognizant.facts.ui.FactsViewModel
 import com.cognizant.facts.utils.Constants
 import com.nhaarman.mockitokotlin2.any
