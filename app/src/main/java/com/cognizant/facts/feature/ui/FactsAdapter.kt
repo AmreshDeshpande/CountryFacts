@@ -72,7 +72,7 @@ class FactsAdapter(private val itemClick: (Fact?) -> (Unit)) :
                 title.text = fact?.title
                 description.text = fact?.description
                 fact?.image?.let { url ->
-                    Picasso.with(context)
+                    Picasso.get()
                         .load(url)
                         .fit().centerInside()
                         .error(R.drawable.place_holder)
@@ -91,7 +91,7 @@ class FactsAdapter(private val itemClick: (Fact?) -> (Unit)) :
             itemView.apply {
                 title.text = fact?.title
                 fact?.image?.let { url ->
-                    Picasso.with(context)
+                    Picasso.get()
                         .load(url)
                          .error(R.drawable.place_holder)
                         .into(factImage)

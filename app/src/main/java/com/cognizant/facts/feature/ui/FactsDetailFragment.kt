@@ -33,7 +33,7 @@ class FactsDetailFragment : Fragment() {
     private fun bindFactDetails(fact: Fact?) {
         (activity as AppCompatActivity).supportActionBar?.title = fact?.title
         factDetailImage.let { imageView ->
-            Picasso.with(activity)
+            Picasso.get()
                 .load(fact?.image)
                 .into(imageView)
         }
