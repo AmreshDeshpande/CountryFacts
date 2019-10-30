@@ -1,9 +1,9 @@
-package com.cognizant.facts.feature.utils
+package com.cognizant.facts.utils
 
 import androidx.appcompat.app.AppCompatActivity
-import com.cognizant.facts.feature.ui.FactsAdapter.Companion.FactItemWithNoDescription
-import com.cognizant.facts.feature.ui.FactsAdapter.Companion.FactItemWithNoImage
-import com.cognizant.facts.feature.data.model.Fact
+import com.cognizant.facts.ui.FactsAdapter.Companion.FactItemWithNoDescription
+import com.cognizant.facts.ui.FactsAdapter.Companion.FactItemWithNoImage
+import com.cognizant.facts.data.model.Fact
 
 /**
  * Extension function to remove empty items(with null title) &

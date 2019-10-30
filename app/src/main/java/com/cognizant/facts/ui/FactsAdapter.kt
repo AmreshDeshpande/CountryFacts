@@ -1,10 +1,10 @@
-package com.cognizant.facts.feature.ui
+package com.cognizant.facts.ui
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.cognizant.facts.feature.data.model.Fact
+import com.cognizant.facts.data.model.Fact
 import kotlinx.android.synthetic.main.facts_item.view.*
 import com.cognizant.facts.R
 import com.squareup.picasso.Picasso
@@ -63,7 +63,7 @@ class FactsAdapter(private val itemClick: (Fact?) -> (Unit)) :
     }
 
     abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        abstract fun bind(item: T, itemClick: (Fact?) -> (Unit))
+        abstract fun bind(fact: T, itemClick: (Fact?) -> (Unit))
     }
 
     inner class FactsItemViewHolder(newItemView: View) : BaseViewHolder<Fact?>(newItemView) {

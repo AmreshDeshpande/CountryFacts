@@ -1,4 +1,4 @@
-package com.cognizant.facts.feature.utils
+package com.cognizant.facts.utils
 
 import android.app.Application
 import android.content.Context
@@ -22,11 +22,11 @@ object NetworkUtility : LiveData<Boolean>() {
 
 
     fun init(application: Application) {
-        this.application = application
+        NetworkUtility.application = application
     }
 
     fun registerNetworkCallback() {
-        connectivityManager = this.application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        connectivityManager = application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         networkCallback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network?) {
@@ -46,10 +46,14 @@ object NetworkUtility : LiveData<Boolean>() {
         postValue(activeNetwork?.isConnected == true)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            connectivityManager.registerDefaultNetworkCallback(networkCallback)
+            connectivityManager.registerDefaultNetworkCallback(
+                networkCallback
+            )
         } else {
             val builder = NetworkRequest.Builder()
-            connectivityManager.registerNetworkCallback(builder.build(), networkCallback)
+            connectivityManager.registerNetworkCallback(builder.build(),
+                networkCallback
+            )
         }
     }
 

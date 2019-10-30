@@ -1,10 +1,10 @@
-package com.cognizant.facts.feature.ui
+package com.cognizant.facts.ui
 
 import androidx.databinding.BindingAdapter
 import android.view.View
 import android.widget.ProgressBar
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.cognizant.facts.feature.data.DataState
+import com.cognizant.facts.data.DataState
 
 @BindingAdapter(value = ["dataState", "swipeToRefresh"], requireAll = false)
 fun setStateForLoading(

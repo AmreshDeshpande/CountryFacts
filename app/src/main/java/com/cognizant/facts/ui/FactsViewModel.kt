@@ -1,15 +1,16 @@
-package com.cognizant.facts.feature
+package com.cognizant.facts.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.cognizant.facts.feature.dataprovider.FactsRepository
+import com.cognizant.facts.dataprovider.FactsRepository
 import androidx.lifecycle.viewModelScope
-import com.cognizant.facts.feature.data.DataState
+import com.cognizant.facts.data.DataState
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FactsViewModel(private val factsRepository: FactsRepository) : ViewModel() {
+class FactsViewModel @Inject constructor (private val factsRepository: FactsRepository) : ViewModel() {
 
     private val factsDataState: MutableLiveData<DataState>? = MutableLiveData()
 
@@ -31,12 +32,12 @@ class FactsViewModel(private val factsRepository: FactsRepository) : ViewModel()
     }
 }
 
-class FactsViewModelFactory(private val factsRepository: FactsRepository) :
+class FactsViewModelFactory @Inject constructor (private val viewModel: FactsViewModel) :
     ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(FactsViewModel::class.java)) {
-            FactsViewModel(this.factsRepository) as T
+            viewModel as T
         } else {
             throw IllegalArgumentException("ViewModel Not Found")
         }

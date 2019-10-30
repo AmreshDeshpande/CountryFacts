@@ -1,4 +1,4 @@
-package com.cognizant.facts.feature.ui
+package com.cognizant.facts.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.cognizant.facts.R
-import com.cognizant.facts.feature.data.model.Fact
+import com.cognizant.facts.data.model.Fact
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.facts_detail_fragment.*
 

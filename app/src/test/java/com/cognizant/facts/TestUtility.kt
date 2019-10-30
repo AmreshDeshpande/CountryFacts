@@ -2,14 +2,14 @@ package com.cognizant.facts
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import com.cognizant.facts.feature.data.model.Country
-import com.cognizant.facts.feature.data.model.Fact
+import com.cognizant.facts.data.model.Country
+import com.cognizant.facts.data.model.Fact
 
 class TestUtility {
 
     companion object {
         //Dummy Data for testing
-        fun getTestFactsRepoData(): Country{
+        fun getTestFactsRepoData(): Country {
             return Country(
                 title = "About Canada",
                 factList = listOf(

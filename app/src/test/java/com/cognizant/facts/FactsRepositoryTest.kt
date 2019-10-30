@@ -1,12 +1,12 @@
 package com.cognizant.facts
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.cognizant.facts.feature.data.api.ErrorResponse
-import com.cognizant.facts.feature.data.api.FactsApiService
-import com.cognizant.facts.feature.data.model.Country
-import com.cognizant.facts.feature.data.model.Fact
-import com.cognizant.facts.feature.dataprovider.FactsRepositoryImpl
-import com.cognizant.facts.feature.dataprovider.FactsRepository
+import com.cognizant.facts.data.api.ErrorResponse
+import com.cognizant.facts.data.api.FactsApiService
+import com.cognizant.facts.data.model.Country
+import com.cognizant.facts.data.model.Fact
+import com.cognizant.facts.dataprovider.FactsRepositoryImpl
+import com.cognizant.facts.dataprovider.FactsRepository
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever

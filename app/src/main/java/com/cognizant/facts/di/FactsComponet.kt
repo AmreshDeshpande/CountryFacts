@@ -1,6 +1,6 @@
-package com.cognizant.facts.feature.di
+package com.cognizant.facts.di
 
-import com.cognizant.facts.feature.ui.FactsHomeFragment
+import com.cognizant.facts.ui.FactsHomeFragment
 import dagger.Component
 
 @Component(modules = [FactsModule::class])

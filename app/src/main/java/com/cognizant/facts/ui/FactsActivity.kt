@@ -1,13 +1,14 @@
-package com.cognizant.facts.feature.ui
+package com.cognizant.facts.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.cognizant.facts.R
-import com.cognizant.facts.feature.data.model.Fact
-import com.cognizant.facts.feature.utils.isHomeFragment
+import com.cognizant.facts.data.model.Fact
+import com.cognizant.facts.utils.isHomeFragment
 import kotlinx.android.synthetic.main.facts_activity.*
 
-class FactsActivity : AppCompatActivity(), FactsHomeFragment.OnFragmentInteractionListener {
+class FactsActivity : AppCompatActivity(),
+    FactsHomeFragment.OnFragmentInteractionListener {
 
     private lateinit var factsHomeFragment: FactsHomeFragment
 

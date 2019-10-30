@@ -1,4 +1,4 @@
-package com.cognizant.facts.feature.ui
+package com.cognizant.facts.ui
 
 import android.content.Context
 import android.os.Bundle
@@ -9,28 +9,28 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import com.cognizant.facts.feature.FactsViewModel
-import com.cognizant.facts.feature.data.model.Fact
+import androidx.lifecycle.ViewModelProviders
+import com.cognizant.facts.data.model.Fact
 import kotlinx.android.synthetic.main.facts_home_fragment.*
 import com.cognizant.facts.R
-import com.cognizant.facts.feature.data.DataState
+import com.cognizant.facts.data.DataState
 import com.cognizant.facts.databinding.FactsHomeFragmentBinding
-import com.cognizant.facts.feature.di.FactsModule
-import com.cognizant.facts.feature.utils.NetworkUtility
-import com.cognizant.facts.feature.utils.mapItemType
-import com.cognizant.facts.feature.utils.showSnackBar
+import com.cognizant.facts.utils.NetworkUtility
+import com.cognizant.facts.utils.mapItemType
+import com.cognizant.facts.utils.showSnackBar
 import kotlinx.android.synthetic.main.no_connection.*
 import javax.inject.Inject
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.cognizant.facts.feature.di.DaggerFactsComponent
-import com.cognizant.facts.feature.utils.isHomeFragment
+import com.cognizant.facts.di.DaggerFactsComponent
+import com.cognizant.facts.utils.isHomeFragment
 
 class FactsHomeFragment : Fragment() {
 
     @Inject
+    lateinit var factsViewModelFactory: FactsViewModelFactory
+
     lateinit var factsViewModel: FactsViewModel
 
-    @Inject
     lateinit var factsAdapter: FactsAdapter
 
     // This is the instance of our parent activity's interface to update from fragment
@@ -43,10 +43,8 @@ class FactsHomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         DaggerFactsComponent
             .builder()
-            .factsModule(FactsModule(this))
             .build()
             .inject(this)
     }
@@ -55,6 +53,8 @@ class FactsHomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        factsViewModel =
+            ViewModelProviders.of(this, factsViewModelFactory).get(FactsViewModel::class.java)
         //Data binding
         val binding: FactsHomeFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.facts_home_fragment, container, false)
@@ -66,6 +66,7 @@ class FactsHomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        factsAdapter = FactsAdapter(itemClick)
         setupRecyclerView()
         setUpSwipeToRefresh()
         setUpNetworkListener()
@@ -139,11 +140,9 @@ class FactsHomeFragment : Fragment() {
     private fun setUpNetworkListener() {
         NetworkUtility.registerNetworkCallback()
         NetworkUtility.observe(this, Observer { connection ->
-            connection?.let { networkAvailable ->
-                if(networkAvailable) factsViewModel.getCountryFacts()
-                recyclerView.visibility = if (networkAvailable) View.VISIBLE else View.GONE
-                noConnectionLayout.visibility = if (networkAvailable) View.GONE else View.VISIBLE
-            }
+            if (connection) factsViewModel.getCountryFacts()
+            recyclerView.visibility = if (connection) View.VISIBLE else View.GONE
+            noConnectionLayout.visibility = if (connection) View.GONE else View.VISIBLE
         })
         tryAgainBtn.setOnClickListener {
             factsViewModel.getCountryFacts()

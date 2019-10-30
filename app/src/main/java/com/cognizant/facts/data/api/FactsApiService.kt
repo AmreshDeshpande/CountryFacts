@@ -1,6 +1,6 @@
-package com.cognizant.facts.feature.data.api
+package com.cognizant.facts.data.api
 
-import com.cognizant.facts.feature.data.model.Country
+import com.cognizant.facts.data.model.Country
 import retrofit2.Response
 import retrofit2.http.GET
 

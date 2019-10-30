@@ -1,13 +1,14 @@
-package com.cognizant.facts.feature.dataprovider
+package com.cognizant.facts.dataprovider
 
-import com.cognizant.facts.feature.data.api.ErrorResponse
-import com.cognizant.facts.feature.data.api.FactsApiService
-import com.cognizant.facts.feature.data.model.Country
+import com.cognizant.facts.data.api.ErrorResponse
+import com.cognizant.facts.data.api.FactsApiService
+import com.cognizant.facts.data.model.Country
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 
-class FactsRepositoryImpl(private val factsApiService: FactsApiService) : FactsRepository {
+class FactsRepositoryImpl(private val factsApiService: FactsApiService) :
+    FactsRepository {
 
     override suspend fun getFacts(
         success: (Country?) -> (Unit),

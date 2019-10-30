@@ -1,4 +1,4 @@
-package com.cognizant.facts.feature.utils
+package com.cognizant.facts.utils
 
 
 import android.view.View

@@ -1,7 +1,7 @@
-package com.cognizant.facts.feature.data
+package com.cognizant.facts.data
 
-import com.cognizant.facts.feature.data.api.ErrorResponse
-import com.cognizant.facts.feature.data.model.Country
+import com.cognizant.facts.data.api.ErrorResponse
+import com.cognizant.facts.data.model.Country
 
 sealed class DataState {
 

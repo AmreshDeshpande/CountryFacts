@@ -2,12 +2,12 @@ package com.cognizant.facts
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.cognizant.facts.TestUtility.Companion.getTestFactsRepoData
-import com.cognizant.facts.feature.data.api.ErrorResponse
-import com.cognizant.facts.feature.data.DataState
-import com.cognizant.facts.feature.FactsViewModel
-import com.cognizant.facts.feature.data.model.Country
-import com.cognizant.facts.feature.dataprovider.FactsRepository
-import com.cognizant.facts.feature.utils.Constants
+import com.cognizant.facts.data.api.ErrorResponse
+import com.cognizant.facts.data.DataState
+import com.cognizant.facts.data.model.Country
+import com.cognizant.facts.dataprovider.FactsRepository
+import com.cognizant.facts.ui.FactsViewModel
+import com.cognizant.facts.utils.Constants
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.*
@@ -96,7 +96,9 @@ class FactsViewModelTest {
         val lock = CountDownLatch(1)
         //Given
         whenever(repository.getFacts(any(), any())).thenAnswer {
-            (it.getArgument(1) as (ErrorResponse) -> (Unit)).invoke((ErrorResponse(Throwable())))
+            (it.getArgument(1) as (ErrorResponse) -> (Unit)).invoke((ErrorResponse(
+                Throwable()
+            )))
             lock.countDown()
         }
 

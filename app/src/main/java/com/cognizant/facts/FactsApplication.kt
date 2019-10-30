@@ -1,7 +1,7 @@
 package com.cognizant.facts
 
 import android.app.Application
-import com.cognizant.facts.feature.utils.NetworkUtility
+import com.cognizant.facts.utils.NetworkUtility
 
 class FactsApplication : Application() {
 

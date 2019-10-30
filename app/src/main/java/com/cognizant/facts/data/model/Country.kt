@@ -1,4 +1,4 @@
-package com.cognizant.facts.feature.data.model
+package com.cognizant.facts.data.model
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
