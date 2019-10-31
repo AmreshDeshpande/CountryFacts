@@ -14,6 +14,9 @@ import kotlinx.android.synthetic.main.facts_detail_fragment.*
 
 const val FACTS_PARAM = "facts_param"
 
+/**
+ * Fragment to display Facts details with image and description.
+ */
 class FactsDetailFragment : Fragment() {
 
     private var fact: Fact? = null

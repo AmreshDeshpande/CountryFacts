@@ -25,6 +25,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.cognizant.facts.di.DaggerFactsComponent
 import com.cognizant.facts.utils.isHomeFragment
 
+/**
+ * Fragment to display list of facts data in recycler view.
+ */
 class FactsHomeFragment : Fragment() {
 
     @Inject
@@ -48,14 +51,16 @@ class FactsHomeFragment : Fragment() {
             .builder()
             .build()
             .inject(this)
+        factsViewModel =
+            ViewModelProviders.of(this, factsViewModelFactory).get(FactsViewModel::class.java)
+        factsViewModel.getCountryFacts()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        factsViewModel =
-            ViewModelProviders.of(this, factsViewModelFactory).get(FactsViewModel::class.java)
+
         //Data binding
         val binding: FactsHomeFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.facts_home_fragment, container, false)
@@ -80,7 +85,6 @@ class FactsHomeFragment : Fragment() {
                 when (factsDataStatus) {
 
                     is DataState.Success -> {
-                        Log.e("imp","got data")
                         if ((activity as AppCompatActivity).isHomeFragment()) {
                             mListener?.setToolBarHomeTitle(
                                 factsDataStatus.countryData?.title ?: ""
@@ -97,7 +101,6 @@ class FactsHomeFragment : Fragment() {
                     }
                 }
             })
-        factsViewModel.getCountryFacts()
     }
 
     private fun setupRecyclerView() {
@@ -111,17 +114,17 @@ class FactsHomeFragment : Fragment() {
 
     private fun setUpSwipeToRefresh() {
         swipeRefresh.setOnRefreshListener {
-            fetchFacts()
+            factsViewModel.getCountryFacts(true)
         }
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
             mListener = context
 
         } else {
-            throw RuntimeException(context!!.toString() + " must implement OnFragmentInteractionListener")
+            throw RuntimeException("$context must implement OnFragmentInteractionListener")
         }
     }
 
@@ -144,9 +147,10 @@ class FactsHomeFragment : Fragment() {
         NetworkUtility.observe(this, Observer { connection ->
             recyclerView.visibility = if (connection) View.VISIBLE else View.GONE
             noConnectionLayout.visibility = if (connection) View.GONE else View.VISIBLE
+            swipeRefresh.isEnabled = connection
         })
         tryAgainBtn.setOnClickListener {
-            factsViewModel.getCountryFacts()
+            factsViewModel.getCountryFacts(true)
         }
     }
 

@@ -17,7 +17,11 @@ class FactsViewModel @Inject constructor (private val factsRepository: FactsRepo
     //Exposing live data to view and not Mutable live status
     fun getCountryDataState(): LiveData<DataState>? = factsDataState
 
-    fun getCountryFacts() {
+    fun getCountryFacts(forceUpdate : Boolean = false) {
+        if(!forceUpdate &&
+            factsDataState?.value is DataState.Success
+            && (factsDataState.value as DataState.Success).countryData != null) return
+
         factsDataState?.value = DataState.Loading
         viewModelScope.launch {
             factsRepository.getFacts(
@@ -32,6 +36,7 @@ class FactsViewModel @Inject constructor (private val factsRepository: FactsRepo
     }
 }
 
+@Suppress("UNCHECKED_CAST")
 class FactsViewModelFactory @Inject constructor (private val viewModel: FactsViewModel) :
     ViewModelProvider.Factory {
 

@@ -6,6 +6,9 @@ import android.widget.ProgressBar
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.cognizant.facts.data.DataState
 
+/**
+ * Databinding Adapter to handle progress bar visibility based on viewmodel data state.
+ */
 @BindingAdapter(value = ["dataState", "swipeToRefresh"], requireAll = false)
 fun setStateForLoading(
     progressBar: ProgressBar,

@@ -7,12 +7,12 @@ import com.cognizant.facts.data.model.Fact
 import com.cognizant.facts.utils.isHomeFragment
 import kotlinx.android.synthetic.main.facts_activity.*
 
+/**
+ * Launch Activity to hold [FactsHomeFragment] and [FactsDetailFragment].
+ * Handles fragments navigation
+ */
 class FactsActivity : AppCompatActivity(),
     FactsHomeFragment.OnFragmentInteractionListener {
-
-    private lateinit var factsHomeFragment: FactsHomeFragment
-
-    private lateinit var factsDetailFragment: FactsDetailFragment
 
     private var toolbarHomeTitle: String? = null
 
@@ -23,7 +23,7 @@ class FactsActivity : AppCompatActivity(),
 
         if (savedInstanceState == null) {
             supportActionBar?.title = ""
-            factsHomeFragment = FactsHomeFragment()
+            val factsHomeFragment = FactsHomeFragment()
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, factsHomeFragment)
                 .addToBackStack(null)
@@ -39,7 +39,7 @@ class FactsActivity : AppCompatActivity(),
     }
 
     override fun navigationToDetailFragment(fact: Fact?) {
-        factsDetailFragment = FactsDetailFragment()
+        val factsDetailFragment = FactsDetailFragment()
         factsDetailFragment.apply {
             arguments = Bundle().apply {
                 putParcelable(FACTS_PARAM, fact)
